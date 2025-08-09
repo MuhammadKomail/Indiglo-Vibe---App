@@ -79,7 +79,7 @@ const defaultStyles = StyleSheet.create({
     elevation: 2,
   },
   primaryButton: {
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary,
     paddingVertical: typography.fontSizes.size14,
     // paddingHorizontal: typography.fontSizes.size30, // will look into this if it issue ever occurs
     borderRadius: typography.fontSizes.size8,
@@ -87,7 +87,7 @@ const defaultStyles = StyleSheet.create({
   },
   primaryButtonText: {
     color: colors.white,
-    fontSize: typography.fontSizes.medium,
+    fontSize: typography.fontSizes.size15,
     fontWeight: typography.fontWeights.regular600,
   },
   image: {

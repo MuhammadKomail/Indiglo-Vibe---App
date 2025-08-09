@@ -35,7 +35,7 @@ setupDefaultChannel();
 
 // ✅ Handle background messages
 messaging().setBackgroundMessageHandler(async remoteMessage => {
-  console.log('📡 [index.js] Background message received:', remoteMessage);
+  // console.log('📡 [index.js] Background message received:', remoteMessage);
 
   const {notification} = remoteMessage;
   if (notification) {

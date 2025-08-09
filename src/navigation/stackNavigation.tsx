@@ -5,16 +5,24 @@ const Stack = createNativeStackNavigator();
 const {Navigator, Screen} = Stack;
 
 // Note: Importing required components...!
-import LanguageSelection from '../screens/languageSelection/languageSelection';
-import LoginScreen from '../screens/loginScreen/loginScreen';
+import VoiceCallScreen from '../screens/VoiceCallScreen/VoiceCallScreen';
 import OfflineScreen from '../screens/offlineScreen/offlineScreen';
+import OnboardingScreen from '../screens/OnboardingScreen/OnboardingScreen';
+import SelectRoleScreen from '../screens/SelectRoleScreen/SelectRoleScreen';
+import LoginScreen from '../screens/LoginScreen/LoginScreen';
+import SignupScreen from '../screens/SignupScreen/SignupScreen';
+import ProfileSetupScreen from '../screens/ProfileSetupScreen/ProfileSetupScreen';
+import ForgetPasswordScreen from '../screens/ForgetPasswordScreen/ForgetPasswordScreen';
+import EnterOtpScreen from '../screens/EnterOtpScreen/EnterOtpScreen';
+import ResetPasswordScreen from '../screens/ResetPasswordScreen/ResetPasswordScreen';
+import AvailabilityScreen from '../screens/AvailabilityScreen/AvailabilityScreen';
 
 // Note: array of screen data...!
 const screenData = [
   {
     id: 1,
-    screenName: 'language-selection',
-    componentName: LoginScreen,
+    screenName: 'onboarding-screen',
+    componentName: OnboardingScreen,
   },
   {
     id: 2,
@@ -23,8 +31,48 @@ const screenData = [
   },
   {
     id: 3,
+    screenName: 'voice-call-screen',
+    componentName: VoiceCallScreen,
+  },
+  {
+    id: 4,
+    screenName: 'select-role-screen',
+    componentName: SelectRoleScreen,
+  },
+  {
+    id: 5,
     screenName: 'login-screen',
-    componentName: LanguageSelection,
+    componentName: LoginScreen,
+  },
+  {
+    id: 6,
+    screenName: 'signup-screen',
+    componentName: SignupScreen,
+  },
+  {
+    id: 7,
+    screenName: 'profile-setup-screen',
+    componentName: ProfileSetupScreen,
+  },
+  {
+    id: 8,
+    screenName: 'forget-password-screen',
+    componentName: ForgetPasswordScreen,
+  },
+  {
+    id: 9,
+    screenName: 'enter-otp-screen',
+    componentName: EnterOtpScreen,
+  },
+  {
+    id: 10,
+    screenName: 'reset-password-screen',
+    componentName: ResetPasswordScreen,
+  },
+  {
+    id: 11,
+    screenName: 'availability-screen',
+    componentName: AvailabilityScreen,
   },
 ];
 
@@ -36,8 +84,8 @@ const StackNavigation = () => {
           return (
             <Screen
               key={item.id}
-              name={item.screenName}
-              component={item.componentName}
+              name={item.screenName as string}
+              component={item.componentName as any}
             />
           );
         })}

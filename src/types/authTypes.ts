@@ -2,6 +2,7 @@
 export interface LoginData {
   username: string;
   password: string;
+  role: string | undefined;
 }
 
 // Represents the entire response from the login API
@@ -18,6 +19,7 @@ export interface LoginResponse {
 export interface UserDataResponse {
   email: string;
   password: string;
+  role: string | undefined;
 }
 
 // Represents the role and actions assigned to the user

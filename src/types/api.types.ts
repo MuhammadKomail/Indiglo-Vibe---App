@@ -10,6 +10,7 @@ export interface ApiResponse<T> {
 export interface LoginRequest {
   email: string;
   password: string;
+  role: string | undefined;
 }
 
 export interface AuthResponse {
@@ -22,6 +23,6 @@ export interface UserData {
   id: string;
   name: string;
   email: string;
-  role: string;
+  role: string | undefined;
   technicianId?: string;
 }

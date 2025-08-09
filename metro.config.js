@@ -14,10 +14,13 @@ const customConfig = {
       ...require('node-libs-react-native'),
       ws: require.resolve('react-native-websocket'),
     },
+    assetExts: defaultConfig.resolver.assetExts.filter(ext => ext !== 'svg'),
+    sourceExts: [...defaultConfig.resolver.sourceExts, 'svg'],
   },
   transformer: {
     // Optional: Enable inline requires for better performance
     inlineRequires: true,
+    babelTransformerPath: require.resolve('react-native-svg-transformer'),
   },
 };
 

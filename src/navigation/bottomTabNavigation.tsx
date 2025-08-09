@@ -7,7 +7,6 @@ import {
   Dimensions,
   I18nManager,
 } from 'react-native';
-import Icon from '@react-native-vector-icons/ionicons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/homeScreen/homeScreen';
@@ -16,20 +15,106 @@ import colors from '../styles/colors';
 import {RootStackParamList} from '../types/navigationTypes';
 import ChatScreen from '../screens/chatScreen/chatScreen';
 import {useTranslation} from 'react-i18next';
+import {svgPath} from '../styles/svgPath';
+import LinearGradient from 'react-native-linear-gradient';
+import {useAppSelector} from '../redux/store';
+import {RootState} from '../redux/store';
 
 const {width} = Dimensions.get('window');
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
-const getIconName = (routeName: string, focused: boolean) => {
+const getIconComponent = (routeName: string, focused: boolean) => {
   switch (routeName) {
-    case 'Home':
-      return focused ? 'home-sharp' : 'home-outline';
-    case 'Profile':
-      return focused ? 'person-sharp' : 'person-outline';
-    case 'Chats':
-      return focused ? 'chatbox-sharp' : 'chatbox-outline';
+    case 'Mentors': {
+      console.log('svgPath.MentorsBottom:', svgPath.MentorsBottom);
+      const IconComponent = svgPath.MentorsBottom;
+      return (
+        <IconComponent
+          width={24}
+          height={24}
+          fill={focused ? colors.blueHue5 : colors.blueHue5}
+        />
+      );
+    }
+    case 'Chat': {
+      const IconComponent = svgPath.ChatBottom;
+      return (
+        <IconComponent
+          width={24}
+          height={24}
+          fill={focused ? colors.blueHue5 : colors.blueHue5}
+        />
+      );
+    }
+    case 'Appointment': {
+      const IconComponent = svgPath.CalendarBottom;
+      return (
+        <IconComponent
+          width={24}
+          height={24}
+          fill={focused ? colors.blueHue5 : colors.blueHue5}
+        />
+      );
+    }
+    case 'Thread': {
+      const IconComponent = svgPath.threadBottom;
+      return (
+        <IconComponent
+          width={24}
+          height={24}
+          fill={focused ? colors.blueHue5 : colors.blueHue5}
+        />
+      );
+    }
     default:
-      return 'ellipse-outline';
+      return null;
+  }
+};
+
+const getMentorIconComponent = (routeName: string, focused: boolean) => {
+  switch (routeName) {
+    case 'Home': {
+      const IconComponent = svgPath.HomeMentor;
+      return (
+        <IconComponent
+          width={24}
+          height={24}
+          fill={focused ? colors.blueHue5 : colors.blueHue5}
+        />
+      );
+    }
+    case 'Chat': {
+      const IconComponent = svgPath.ChatBottom;
+      return (
+        <IconComponent
+          width={24}
+          height={24}
+          fill={focused ? colors.blueHue5 : colors.blueHue5}
+        />
+      );
+    }
+    case 'Appointment': {
+      const IconComponent = svgPath.CalendarBottom;
+      return (
+        <IconComponent
+          width={24}
+          height={24}
+          fill={focused ? colors.blueHue5 : colors.blueHue5}
+        />
+      );
+    }
+    case 'Profile': {
+      const IconComponent = svgPath.ProfileBottom;
+      return (
+        <IconComponent
+          width={24}
+          height={24}
+          fill={focused ? colors.blueHue5 : colors.blueHue5}
+        />
+      );
+    }
+    default:
+      return null;
   }
 };
 
@@ -37,7 +122,8 @@ const CustomTabBar = (props: BottomTabBarProps) => {
   const {state, descriptors, navigation} = props;
   const {t} = useTranslation();
   const isRTL = I18nManager.isRTL;
-
+  const {user} = useAppSelector((state: RootState) => state.auth);
+  console.log('user', user);
   return (
     <View
       style={[
@@ -65,15 +151,13 @@ const CustomTabBar = (props: BottomTabBarProps) => {
 
           return (
             <TouchableOpacity
-              key={route.key}
+              key={route.name}
               onPress={onPress}
               style={styles.tabButton}>
               <View style={styles.iconWrapper}>
-                <Icon
-                  name={getIconName(route.name, isFocused)}
-                  size={24}
-                  color={isFocused ? colors.primary : colors.gray}
-                />
+                {user?.role === 'mentor'
+                  ? getMentorIconComponent(route.name, isFocused)
+                  : getIconComponent(route.name, isFocused)}
               </View>
               <Text style={[styles.tabText, isFocused && styles.focusedText]}>
                 {t(route.name)}
@@ -90,23 +174,46 @@ const CustomTabBar = (props: BottomTabBarProps) => {
             [!isRTL ? 'right' : 'left']: width / 2 - 37,
           },
         ]}>
-        <View style={styles.middleButton}>
-          <Icon name="ticket-outline" size={28} color="#fff" />
-        </View>
+        <LinearGradient
+          colors={['#122187', '#1D2BC5']}
+          start={{x: 1, y: 0}}
+          end={{x: 0, y: 1}}
+          style={styles.middleButton}>
+          {user?.role === 'mentor' ? (
+            <svgPath.AddBottom width={24} height={24} fill={colors.white} />
+          ) : (
+            <svgPath.HomeBottom width={24} height={24} fill={colors.white} />
+          )}
+        </LinearGradient>
       </TouchableOpacity>
     </View>
   );
 };
 
 const BottomTab = () => {
-  return (
+  const {user} = useAppSelector((state: RootState) => state.auth);
+
+  return user?.role === 'mentor' ? (
     <Tab.Navigator
       screenOptions={{headerShown: false}}
       tabBar={props => <CustomTabBar {...props} />}>
       {/* Visible tabs */}
       <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Chat" component={ChatScreen} />
+      <Tab.Screen name="Thread" component={HomeScreen} />
+      <Tab.Screen name="Appointment" component={ProfileScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
-      <Tab.Screen name="Chats" component={ChatScreen} />
+    </Tab.Navigator>
+  ) : (
+    <Tab.Navigator
+      screenOptions={{headerShown: false}}
+      tabBar={props => <CustomTabBar {...props} />}>
+      {/* Visible tabs */}
+      <Tab.Screen name="Mentors" component={HomeScreen} />
+      <Tab.Screen name="Chat" component={ChatScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Appointment" component={ProfileScreen} />
+      <Tab.Screen name="Thread" component={ProfileScreen} />
     </Tab.Navigator>
   );
 };
@@ -120,8 +227,8 @@ const styles = StyleSheet.create({
     height: 90,
     paddingBottom: 10,
     position: 'relative',
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    // borderTopLeftRadius: 15,
+    // borderTopRightRadius: 15,
     paddingHorizontal: 10,
   },
   tabButton: {
@@ -151,9 +258,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
   },
+  middleText: {
+    color: colors.gray,
+    fontSize: 12,
+    // marginTop: 5,
+    textAlign: 'center',
+  },
   focusedText: {
     color: colors.primary,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   iconWrapper: {
     position: 'relative',

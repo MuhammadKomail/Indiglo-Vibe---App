@@ -28,7 +28,7 @@ export async function requestAndroidPermission() {
       );
       return result === 'granted';
     } catch (error) {
-      console.log('Error requesting android permission', error);
+      // console.log('Error requesting android permission', error);
       return false;
     }
   }
@@ -54,13 +54,13 @@ export async function requestUserPermission() {
     }
 
     if (enabled) {
-      console.log('✅ Notification permission granted.');
+      // console.log('✅ Notification permission granted.');
       await getFcmToken();
     } else {
-      console.log('❌ Notification permission denied.');
+      // console.log('❌ Notification permission denied.');
     }
   } catch (error) {
-    console.log('❌ Error requesting permission:', error);
+    // console.log('❌ Error requesting permission:', error);
   }
 }
 
@@ -68,9 +68,9 @@ async function getFcmToken() {
   try {
     const messaging = getMessaging(getApp());
     const token = await getToken(messaging);
-    console.log('🔥 FCM Token:', token);
+    // console.log('🔥 FCM Token:', token);
   } catch (error) {
-    console.log('❌ Failed to get FCM token:', error);
+    // console.log('❌ Failed to get FCM token:', error);
   }
 }
 
@@ -80,7 +80,7 @@ function handleForegroundNotifications() {
   onMessage(
     messaging,
     async (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
-      console.log('📬 Foreground Notification:', remoteMessage);
+      // console.log('📬 Foreground Notification:', remoteMessage);
 
       const title = remoteMessage.notification?.title || 'Notification';
       const body = remoteMessage.notification?.body || '';
@@ -103,7 +103,7 @@ async function handleNotificationOpenedApp() {
   const messaging = getMessaging(getApp());
 
   onNotificationOpenedApp(messaging, remoteMessage => {
-    console.log('📥 Opened from background:', remoteMessage);
+    // console.log('📥 Opened from background:', remoteMessage);
     const route = remoteMessage.data?.route;
     if (route && navigationRef) {
       // navigationRef.navigate(route);
@@ -112,7 +112,7 @@ async function handleNotificationOpenedApp() {
 
   const initialMessage = await getInitialNotification(messaging);
   if (initialMessage) {
-    console.log('📥 Opened from quit state:', initialMessage);
+    // console.log('📥 Opened from quit state:', initialMessage);
     const route = initialMessage.data?.route;
     if (route && navigationRef) {
       // navigationRef.navigate(route);
@@ -125,11 +125,11 @@ notifee.onBackgroundEvent(async ({type, detail}) => {
   const {notification, pressAction} = detail;
 
   if (type === EventType.ACTION_PRESS && pressAction?.id === 'default') {
-    console.log('🔙 Notification tapped:', notification);
+    // console.log('🔙 Notification tapped:', notification);
   }
 
   if (type === EventType.DISMISSED) {
-    console.log('🔕 Notification dismissed:', notification);
+    // console.log('🔕 Notification dismissed:', notification);
   }
 });
 

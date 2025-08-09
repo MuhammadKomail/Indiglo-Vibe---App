@@ -1,13 +1,22 @@
 export type RootStackParamList = {
   'language-selection': undefined;
-  'login-screen': undefined;
+  'login-screen': {role?: string};
+  'signup-screen': {role?: string};
+  'reset-password-screen': {role?: string};
+  'availability-screen': {role?: string};
+  'profile-setup-screen': {role?: string};
   'home-tabs': {screen?: string};
   'offline-screen': undefined;
   'chat-screen': undefined;
+  'forget-password-screen': {role?: string};
+  'enter-otp-screen': {role?: string};
   'message-screen': undefined;
   'create-chat-screen': undefined;
+  'onboarding-screen': undefined;
   Home: undefined;
-  Chats: undefined;
+  Chat: undefined;
+  Appointment: undefined;
+  Thread: undefined;
+  Mentors: undefined;
   Profile: undefined;
-  Tickets: undefined;
 };

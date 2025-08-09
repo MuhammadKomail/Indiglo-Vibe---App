@@ -6,11 +6,11 @@ import {
 } from '@react-navigation/native';
 import navigationService from './navigationService';
 import StackNavigation from './stackNavigation';
-import DrawerNavigation from './drawerNavigation';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {RootState, useAppSelector} from '../redux/store';
 import {ThemeProvider, useTheme} from '../theme/ThemeContext';
 import {lightTheme, darkTheme} from '../theme/theme';
+import MainStackNavigation from './MainStackNavigation';
 
 const NavigationContent = () => {
   const {user, token} = useAppSelector((state: RootState) => state.auth);
@@ -37,7 +37,7 @@ const NavigationContent = () => {
     <NavigationContainer
       theme={navigationTheme}
       ref={ref => navigationService.setTopLevelNavigator(ref)}>
-      {!user && !token ? <StackNavigation /> : <DrawerNavigation />}
+      {!user && !token ? <StackNavigation /> : <MainStackNavigation />}
     </NavigationContainer>
   );
 };
