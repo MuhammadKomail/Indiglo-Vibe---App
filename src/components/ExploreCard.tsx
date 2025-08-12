@@ -8,17 +8,27 @@ interface ExploreCardProps {
   name: string;
   category: string;
   price: number;
+  time: string;
+  image: any;
 }
 
-const ExploreCard: React.FC<ExploreCardProps> = ({name, category, price}) => {
+const ExploreCard: React.FC<ExploreCardProps> = ({
+  name,
+  category,
+  price,
+  time,
+  image,
+}) => {
   return (
     <View style={styles.shadowContainer}>
       <View style={styles.card}>
-        <Image source={imagePath.ProfileImage2} style={styles.image} />
+        <Image source={image} style={styles.image} />
         <View style={styles.textContainer}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.category}>{category}</Text>
-          <Text style={styles.price}>${price} /30 min</Text>
+          <Text style={styles.price}>
+            ${price} /{time}
+          </Text>
         </View>
       </View>
     </View>

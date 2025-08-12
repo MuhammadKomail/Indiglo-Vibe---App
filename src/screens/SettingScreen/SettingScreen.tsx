@@ -59,7 +59,7 @@ const SettingScreen = () => {
     },
     {
       label: 'Edit Profile',
-      screen: 'EditProfile',
+      screen: 'EditProfileScreen',
       icon: <svgPath.EditProfileSetting width={40} height={40} />,
     },
     {
@@ -114,7 +114,7 @@ const SettingScreen = () => {
     },
     {
       label: 'Edit Profile',
-      screen: 'EditProfile',
+      screen: 'EditProfileScreen',
       icon: <svgPath.EditProfileSetting width={40} height={40} />,
     },
     {
@@ -198,7 +198,7 @@ const SettingScreen = () => {
         <Image source={imagePath.profileUser} style={styles.profileImage} />
         <TouchableOpacity
           style={styles.editIcon}
-          onPress={() => navigation.navigate('EditProfile' as never)}>
+          onPress={() => navigation.navigate('EditProfileScreen' as never)}>
           <svgPath.EditProfile width={12} height={12} fill={colors.white} />
         </TouchableOpacity>
       </View>
@@ -247,11 +247,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: colors.blueHue4,
     textAlign: 'center',
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: colors.blueHue,
   },
   profileContainer: {
     alignItems: 'center',

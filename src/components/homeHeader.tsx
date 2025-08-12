@@ -105,6 +105,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
             <HomeSearch
               iconBackgroundColor={colors.white}
               iconColor={colors.primary}
+              searchbarBackground={colors.white}
             />
           </View>
         )}

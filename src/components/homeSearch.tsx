@@ -16,9 +16,11 @@ import {svgPath} from '../styles/svgPath';
 const HomeSearch = ({
   iconBackgroundColor,
   iconColor,
+  searchbarBackground,
 }: {
   iconBackgroundColor: string;
   iconColor: string;
+  searchbarBackground?: string;
 }) => {
   const ViewDetail = () => {
     return;
@@ -26,7 +28,11 @@ const HomeSearch = ({
 
   return (
     <View style={styles.searchContainer}>
-      <View style={[styles.inputContainer, {flexDirection: 'row'}]}>
+      <View
+        style={[
+          styles.inputContainer,
+          {flexDirection: 'row', backgroundColor: searchbarBackground},
+        ]}>
         <View style={styles.iconContainer}>
           <Icon name="search" size={22} color={colors.blueHue4} />
         </View>

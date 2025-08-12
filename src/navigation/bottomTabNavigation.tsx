@@ -19,6 +19,7 @@ import {svgPath} from '../styles/svgPath';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppSelector} from '../redux/store';
 import {RootState} from '../redux/store';
+import ExploreMentorScreen from '../screens/ExploreMentorScreen/ExploreMentorScreen';
 
 const {width} = Dimensions.get('window');
 const Tab = createBottomTabNavigator<RootStackParamList>();
@@ -167,7 +168,7 @@ const CustomTabBar = (props: BottomTabBarProps) => {
         })}
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('Profile', undefined)}
+        onPress={() => navigation.navigate('Home', undefined)}
         style={[
           styles.middleButtonContainer,
           {
@@ -206,10 +207,11 @@ const BottomTab = () => {
     </Tab.Navigator>
   ) : (
     <Tab.Navigator
+      initialRouteName="Home"
       screenOptions={{headerShown: false}}
       tabBar={props => <CustomTabBar {...props} />}>
       {/* Visible tabs */}
-      <Tab.Screen name="Mentors" component={HomeScreen} />
+      <Tab.Screen name="Mentors" component={ExploreMentorScreen} />
       <Tab.Screen name="Chat" component={ChatScreen} />
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Appointment" component={ProfileScreen} />

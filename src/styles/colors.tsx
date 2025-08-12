@@ -8,12 +8,19 @@ const colors = {
   secondary: '#00007B',
   tertiary: '#E6F2FF',
   gray: '#909090',
+  gray2: '#828282',
+  gray3: '#999999',
   lightGray: '#E1E8EB',
   lightGray30: '##E1E8EB4D',
   lightGray2: '#EDEDED',
   lightGray10: 'rgba(75, 0, 130, 0.1)',
   lightGray3: '#CCCCCC',
   lightGray4: '#D1D1D1',
+  lightGray5: '#A4A4A4',
+  lightGray6: '#E7E7E7',
+  lightGray7: '#979595',
+  lightGray8: '#EBEBEB',
+  offWhite: '#F1F1F1',
   grayHue: '#f2f3f4',
   grayHue2: 'rgba(28, 28, 28, 0.4)',
   background: '#f8f9fa',
@@ -25,6 +32,7 @@ const colors = {
   black2: '#353535',
   black3: '#21252C',
   black4: '#101010',
+  black5: '#0D1B34',
   black60: 'rgba(28, 28, 28, 0.6)',
   blueHue: '#332D36',
   blueHue2: '#323232',
@@ -39,6 +47,14 @@ const colors = {
   overlayWhite: 'rgba(255, 255, 255, 0.8)', // For dateContainer
   overlayPrimary: 'rgba(1, 188, 205, 0.1)', // For lastLoginContainer
   error: '#FF0000',
+  green2: '#06D146',
+  speciality1: '#2B47B11A',
+  speciality2: '#B92BF61A',
+  speciality3: '#4B00821A',
+  speciality4: '#B0009E1A',
+  specialityText2: '#B92BF6',
+  specialityText3: '#4B0082',
+  specialityText4: '#B0009E',
 };
 
 export default colors;

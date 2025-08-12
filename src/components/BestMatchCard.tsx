@@ -10,9 +10,23 @@ interface BestMatchCardProps {
   name: string;
   desc: string;
   index: number;
+  callTime: string;
+  callPrice: string;
+  messageTime: string;
+  messagePrice: string;
+  image: any;
 }
 
-const BestMatchCard: React.FC<BestMatchCardProps> = ({name, desc, index}) => {
+const BestMatchCard: React.FC<BestMatchCardProps> = ({
+  name,
+  desc,
+  index,
+  callTime,
+  callPrice,
+  messageTime,
+  messagePrice,
+  image,
+}) => {
   // Gradient logic based on index
   let gradientColors = ['#ABBBF8', '#576BB7'];
   let gradientStart = {x: 0, y: 0};
@@ -30,7 +44,7 @@ const BestMatchCard: React.FC<BestMatchCardProps> = ({name, desc, index}) => {
       end={gradientEnd}
       style={styles.bestMatchCard}>
       <View style={styles.header}>
-        <Image source={imagePath.profileUser} style={styles.profileImage} />
+        <Image source={image} style={styles.profileImage} />
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.desc}>{desc}</Text>
         <View style={styles.descBorder} />
@@ -42,8 +56,8 @@ const BestMatchCard: React.FC<BestMatchCardProps> = ({name, desc, index}) => {
             <View style={styles.coinSection}>
               <svgPath.Coins width={18} height={18} />
               <View>
-                <Text style={styles.priceWhite}>$20</Text>
-                <Text style={styles.minWhite}>20 min</Text>
+                <Text style={styles.priceWhite}>{callPrice}</Text>
+                <Text style={styles.minWhite}>{callTime}</Text>
               </View>
             </View>
           </View>
@@ -54,8 +68,8 @@ const BestMatchCard: React.FC<BestMatchCardProps> = ({name, desc, index}) => {
             <View style={styles.coinSection}>
               <svgPath.Coins width={18} height={18} />
               <View>
-                <Text style={styles.priceBlue}>$20</Text>
-                <Text style={styles.minBlue}>20 min</Text>
+                <Text style={styles.priceBlue}>{messagePrice}</Text>
+                <Text style={styles.minBlue}>{messageTime}</Text>
               </View>
             </View>
           </View>

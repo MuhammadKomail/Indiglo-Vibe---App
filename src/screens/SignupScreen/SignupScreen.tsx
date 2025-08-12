@@ -40,7 +40,6 @@ const SignupScreen: React.FC<SignupScreenProps> = ({route, navigation}) => {
   ) => {
     setCountryCode(newCountryCode);
     setPhoneNumber(newPhoneNumber);
-    // console.log('Phone Input Changed:', newCountryCode, newPhoneNumber);
   };
 
   const handleBack = () => {
@@ -229,11 +228,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderRadius: 15,
     marginTop: 20,
-  },
-  bottomText: {
-    color: colors.primary,
-    fontSize: 14,
-    fontWeight: '400',
   },
   dividerRow: {
     flexDirection: 'row',

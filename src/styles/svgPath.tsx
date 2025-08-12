@@ -30,6 +30,9 @@ import FilterIcon from '../assets/images/svg/filterIcon.svg';
 import Coins from '../assets/images/svg/coins.svg';
 import Message from '../assets/images/svg/message.svg';
 import Phone from '../assets/images/svg/phone.svg';
+import Menu from '../assets/images/svg/Menu.svg';
+import Clock from '../assets/images/svg/Clock.svg';
+import Date from '../assets/images/svg/Date.svg';
 
 export const svgPath = {
   MentorsBottom: MentorsBottom,
@@ -60,6 +63,9 @@ export const svgPath = {
   Message: Message,
   Coins: Coins,
   Phone: Phone,
+  Menu: Menu,
+  Clock: Clock,
+  Date: Date,
 } as const;
 
 export type SvgPath = keyof typeof svgPath;

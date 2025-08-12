@@ -3,38 +3,30 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableOpacity,
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  ImageBackground,
 } from 'react-native';
-import imagePath from '../../styles/imgPath';
-import MaterialIcons from '@react-native-vector-icons/material-icons';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../types/navigationTypes';
 import colors from '../../styles/colors';
 import Button from '../../components/button';
 import {sections} from '../../utils/data';
+import {useNavigation} from '@react-navigation/native';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
+import AppHeader from '../../components/AppHeader';
 
-const ProfileSetupScreen: React.FC<
-  NativeStackScreenProps<RootStackParamList, 'profile-setup-screen'>
-> = ({route, navigation}) => {
-  const {role} = route.params;
+const SetSpecialityScreen = () => {
   const [bio, setBio] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const navigation = useNavigation<DrawerNavigationProp<any>>();
 
   const handleBack = () => {
     navigation.goBack();
   };
 
   const handleNext = () => {
-    if (role === 'user') {
-      // navigation.navigate('availability-screen', { role: role });
-    } else {
-      navigation.navigate('availability-screen', {role: role});
-    }
+    navigation.goBack();
   };
 
   const handleTagToggle = (tag: string) => {
@@ -76,49 +68,12 @@ const ProfileSetupScreen: React.FC<
   const headerComponent = () => {
     return (
       <>
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <MaterialIcons
-            name="arrow-back-ios"
-            size={16}
-            color={colors.blueHue}
-            style={styles.backIcon}
-          />
-        </TouchableOpacity>
-
         <View style={styles.container}>
-          <Text style={styles.title}>
-            {role === 'user'
-              ? 'Tell Us What You Need Help With'
-              : 'Tell the users about yourself.'}
-          </Text>
+          <Text style={styles.title}>Tell Users What You Can Help With</Text>
           <Text style={styles.subtitle}>
-            {role === 'user'
-              ? 'Choose topics or areas you’d like support in. We’ll match you with mentors who specialize in what matters to you.'
-              : 'Provide details and gain trust!'}
+            Choose topics or areas you’d like to provide support in. We’ll match
+            you with mentees who need your help.
           </Text>
-
-          {role === 'mentor' && (
-            <>
-              <Text style={styles.label}>Bio</Text>
-              <TextInput
-                style={styles.bioInput}
-                multiline
-                numberOfLines={4}
-                placeholder="Tell the user about yourself"
-                value={bio}
-                onChangeText={setBio}
-                textAlignVertical="top"
-                placeholderTextColor={colors.black20}
-              />
-              <Text style={styles.title}>
-                Tell Users What You Can Help With
-              </Text>
-              <Text style={styles.subtitle}>
-                Choose topics or areas you’d like to provide support in. We’ll
-                match you with mentees who need your help.
-              </Text>
-            </>
-          )}
         </View>
       </>
     );
@@ -128,7 +83,7 @@ const ProfileSetupScreen: React.FC<
     return (
       <View style={styles.renderContainer}>
         <Button
-          title={role === 'user' ? 'Get Started' : 'Next'}
+          title={'Update'}
           style={styles.buttonUser}
           backgroundGradient={[colors.blue, colors.blue2]}
           textColor={colors.silver}
@@ -139,25 +94,21 @@ const ProfileSetupScreen: React.FC<
   };
 
   return (
-    <ImageBackground
-      source={imagePath.backgroundImage2}
-      style={styles.backgroundImg}
-      resizeMode="cover">
-      <KeyboardAvoidingView
-        style={{flex: 1}}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={80}>
-        <FlatList
-          data={sections}
-          keyExtractor={(item, index) => item.title + index}
-          renderItem={renderSectionItem}
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={styles.scrollContent}
-          ListHeaderComponent={headerComponent}
-          ListFooterComponent={footerComponent}
-        />
-      </KeyboardAvoidingView>
-    </ImageBackground>
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={80}>
+      <AppHeader title="Set Specialties" backIcon={handleBack} />
+      <FlatList
+        data={sections}
+        keyExtractor={(item, index) => item.title + index}
+        renderItem={renderSectionItem}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.scrollContent}
+        ListHeaderComponent={headerComponent}
+        ListFooterComponent={footerComponent}
+      />
+    </KeyboardAvoidingView>
   );
 };
 
@@ -166,7 +117,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    marginTop: 120,
+    marginTop: 30,
     flex: 1,
     marginHorizontal: 20,
   },
@@ -231,7 +182,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   sectionHeader: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '500',
     marginBottom: 12,
     color: colors.blueHue,
@@ -268,4 +219,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileSetupScreen;
+export default SetSpecialityScreen;

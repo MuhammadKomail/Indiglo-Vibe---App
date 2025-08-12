@@ -14,9 +14,14 @@ import {useNavigation} from '@react-navigation/native';
 interface AppHeaderProps {
   title?: string;
   backIcon?: () => void;
+  height?: number;
 }
 
-const AppHeader: React.FC<AppHeaderProps> = ({title, backIcon}) => {
+const AppHeader: React.FC<AppHeaderProps> = ({
+  title,
+  backIcon,
+  height = 160,
+}) => {
   const navigation = useNavigation();
 
   const backClick = () => {
@@ -24,7 +29,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({title, backIcon}) => {
   };
 
   return (
-    <View style={styles.headerWrapper}>
+    <View style={[styles.headerWrapper, {height: height}]}>
       <ImageBackground
         source={imgPath.headerBackground}
         style={styles.backgroundImg}
@@ -38,7 +43,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({title, backIcon}) => {
             />
           </TouchableOpacity>
           {title && (
-            <ThemedText style={styles.headerTitle}>{title}!</ThemedText>
+            <>
+              <ThemedText style={styles.headerTitle}>{title}!</ThemedText>
+              <ThemedText style={styles.headerTitle}> </ThemedText>
+            </>
           )}
         </View>
       </ImageBackground>
@@ -50,7 +58,6 @@ export default AppHeader;
 
 const styles = StyleSheet.create({
   headerWrapper: {
-    height: 160,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     overflow: 'hidden',
