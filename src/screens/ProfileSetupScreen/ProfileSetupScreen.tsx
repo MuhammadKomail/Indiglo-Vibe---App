@@ -8,7 +8,6 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   ImageBackground,
 } from 'react-native';
 import imagePath from '../../styles/imgPath';
@@ -233,10 +232,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
   },
-  contentContainer: {
-    padding: 20,
-    paddingBottom: 40,
-  },
   backButton: {
     position: 'absolute',
     top: 70,
@@ -270,7 +265,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     marginBottom: 6,
-    color: '#333',
+    color: colors.blueHue,
   },
   bioInput: {
     height: 100, // or any value like 120, depending on your design

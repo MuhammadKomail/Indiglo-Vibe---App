@@ -30,6 +30,5 @@ export const showToast = ({
       duration,
       placement: position,
     });
-  } else {
   }
 };

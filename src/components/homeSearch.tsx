@@ -2,7 +2,6 @@ import {
   StyleSheet,
   View,
   TextInput,
-  I18nManager,
   Platform,
   TouchableOpacity,
 } from 'react-native';
@@ -10,12 +9,10 @@ import React from 'react';
 import Icon from '@react-native-vector-icons/ionicons';
 import colors from '../styles/colors';
 import typography from '../styles/typography';
-import ButtonWithIcon from './ButtonWithIcon';
 import {svgPath} from '../styles/svgPath';
 
 const HomeSearch = ({
   iconBackgroundColor,
-  iconColor,
 }: {
   iconBackgroundColor: string;
   iconColor: string;

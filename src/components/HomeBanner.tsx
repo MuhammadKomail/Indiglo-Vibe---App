@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  ImageBackground,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, Image, ImageBackground, StyleSheet} from 'react-native';
 import HomeBannerBg from '../assets/images/HomeBannerBg.png'; // change to your actual path
 import HomeBannerImage from '../assets/images/HomeBannerImage.png'; // change to your actual path
 import {colors} from '../styles/style';

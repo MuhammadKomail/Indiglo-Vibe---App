@@ -1,14 +1,12 @@
 import {
   StyleSheet,
   View,
-  Image,
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
 import React from 'react';
 import {colors, imgPath, svgPath} from '../styles/style';
 import {ThemedText} from './ThemedComponents';
-import ButtonWithIcon from './ButtonWithIcon';
 import {useNavigation} from '@react-navigation/native';
 
 interface AppHeaderProps {
@@ -16,7 +14,7 @@ interface AppHeaderProps {
   backIcon?: () => void;
 }
 
-const AppHeader: React.FC<AppHeaderProps> = ({title, backIcon}) => {
+const AppHeader: React.FC<AppHeaderProps> = ({title}) => {
   const navigation = useNavigation();
 
   const backClick = () => {

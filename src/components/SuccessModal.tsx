@@ -88,7 +88,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: colors.black20,
     justifyContent: 'center',
     alignItems: 'center',
   },

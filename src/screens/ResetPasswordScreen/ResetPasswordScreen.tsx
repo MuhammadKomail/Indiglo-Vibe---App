@@ -142,11 +142,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // marginBottom: 10,
   },
-  headerText: {
-    color: colors.blueHue,
-    fontSize: 16,
-    fontWeight: '400',
-  },
   headerBox: {
     width: '90%',
     flexDirection: 'column',

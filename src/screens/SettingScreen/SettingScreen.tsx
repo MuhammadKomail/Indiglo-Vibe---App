@@ -5,7 +5,6 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Text,
 } from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -20,8 +19,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../redux/actions/authAction/authAction';
 import {ThemedText} from '../../components/ThemedText';
 import {RootState} from '../../redux/store';
-
-type Role = 'mentor' | 'user';
 
 interface OptionType {
   label: string;
@@ -171,7 +168,7 @@ const SettingScreen = () => {
           {
             text: 'Delete',
             style: 'destructive',
-            onPress: () => console.log('Account Deleted'),
+            onPress: () => {},
           },
         ],
       );
@@ -248,11 +245,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: colors.blueHue4,
     textAlign: 'center',
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: colors.blueHue,
   },
   profileContainer: {
     alignItems: 'center',

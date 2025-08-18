@@ -27,15 +27,11 @@ const LanguageSelection = () => {
   // Initial language load
   useEffect(() => {
     const loadSavedLanguage = async () => {
-      try {
-        const savedLang = tokenStorage.getToken();
-        if (savedLang) {
-          setLanguageSelection(savedLang);
-          await i18n.changeLanguage(savedLang);
-          I18nManager.forceRTL(savedLang === 'ar');
-        }
-      } catch (error) {
-        throw error;
+      const savedLang = tokenStorage.getToken();
+      if (savedLang) {
+        setLanguageSelection(savedLang);
+        await i18n.changeLanguage(savedLang);
+        I18nManager.forceRTL(savedLang === 'ar');
       }
     };
     loadSavedLanguage();
@@ -54,27 +50,23 @@ const LanguageSelection = () => {
   useEffect(() => {
     if (languageSelection !== '') {
       const updateLanguage = async () => {
-        try {
-          // Pehle check karein ke current language different hai
-          const currentLang = tokenStorage.getToken();
-          if (currentLang === languageSelection) {
-            return; // Agar same language hai to kuch na karein
-          }
+        // Pehle check karein ke current language different hai
+        const currentLang = tokenStorage.getToken();
+        if (currentLang === languageSelection) {
+          return; // Agar same language hai to kuch na karein
+        }
 
-          await tokenStorage.saveToken(languageSelection);
-          await i18n.changeLanguage(languageSelection);
-          I18nManager.forceRTL(i18n.language === 'ar');
-          dispatch(changeLanguage(languageSelection));
+        await tokenStorage.saveToken(languageSelection);
+        await i18n.changeLanguage(languageSelection);
+        I18nManager.forceRTL(i18n.language === 'ar');
+        dispatch(changeLanguage(languageSelection));
 
-          // Sirf tab restart karein jab RTL/LTR change ho
-          const needsRestart =
-            (languageSelection === 'ar' && !I18nManager.isRTL) ||
-            (languageSelection === 'en' && I18nManager.isRTL);
-          if (needsRestart) {
-            setTimeout(() => RNRestart.Restart(), 1000);
-          }
-        } catch (error) {
-          throw error;
+        // Sirf tab restart karein jab RTL/LTR change ho
+        const needsRestart =
+          (languageSelection === 'ar' && !I18nManager.isRTL) ||
+          (languageSelection === 'en' && I18nManager.isRTL);
+        if (needsRestart) {
+          setTimeout(() => RNRestart.Restart(), 1000);
         }
       };
       updateLanguage();

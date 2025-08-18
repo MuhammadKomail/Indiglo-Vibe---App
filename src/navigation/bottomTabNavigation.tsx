@@ -26,7 +26,6 @@ const Tab = createBottomTabNavigator<RootStackParamList>();
 const getIconComponent = (routeName: string, focused: boolean) => {
   switch (routeName) {
     case 'Mentors': {
-      console.log('svgPath.MentorsBottom:', svgPath.MentorsBottom);
       const IconComponent = svgPath.MentorsBottom;
       return (
         <IconComponent
@@ -123,7 +122,6 @@ const CustomTabBar = (props: BottomTabBarProps) => {
   const {t} = useTranslation();
   const isRTL = I18nManager.isRTL;
   const {user} = useAppSelector((state: RootState) => state.auth);
-  console.log('user', user);
   return (
     <View
       style={[
@@ -257,12 +255,6 @@ const styles = StyleSheet.create({
     color: colors.gray,
     fontSize: 12,
     marginTop: 5,
-  },
-  middleText: {
-    color: colors.gray,
-    fontSize: 12,
-    // marginTop: 5,
-    textAlign: 'center',
   },
   focusedText: {
     color: colors.primary,

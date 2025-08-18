@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 import {colors, imgPath} from '../../styles/style';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -45,10 +44,6 @@ const SignupScreen: React.FC<SignupScreenProps> = ({route, navigation}) => {
 
   const handleBack = () => {
     navigation.goBack();
-  };
-
-  const handleForgotPassword = () => {
-    navigation.navigate('onboarding-screen');
   };
 
   const handleSignup = () => {
@@ -214,13 +209,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
-  forgotText: {
-    color: colors.primary,
-    // fontWeight: '600',
-    textAlign: 'right',
-    marginBottom: 20,
-    marginRight: 20,
-  },
   buttonUser: {
     width: '95%',
     height: 56,
@@ -229,11 +217,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderRadius: 15,
     marginTop: 20,
-  },
-  bottomText: {
-    color: colors.primary,
-    fontSize: 14,
-    fontWeight: '400',
   },
   dividerRow: {
     flexDirection: 'row',

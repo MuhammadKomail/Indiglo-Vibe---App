@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacityProps,
   ViewStyle,
-  StyleSheet,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import defaultStyles from '../styles/defaultStyles';
@@ -42,11 +41,3 @@ const Button: React.FC<ButtonProps> = ({
 };
 
 export default Button;
-
-const styles = StyleSheet.create({
-  // primaryButton: {
-  //     paddingVertical: 12,
-  //     paddingHorizontal: 100,
-  //     borderRadius: 15,
-  // },
-});

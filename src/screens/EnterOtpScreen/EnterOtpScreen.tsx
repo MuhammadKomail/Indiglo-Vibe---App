@@ -28,7 +28,7 @@ const EnterOtpScreen = ({navigation, route}: EnterOtpScreenProps) => {
 
   // Timer countdown
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
+    let interval: ReturnType<typeof setInterval> | null = null;
     if (timer > 0) {
       interval = setInterval(() => setTimer(prev => prev - 1), 1000);
     }
@@ -169,11 +169,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // marginBottom: 10,
-  },
-  headerText: {
-    color: colors.blueHue,
-    fontSize: 16,
-    fontWeight: '400',
   },
   headerBox: {
     width: '90%',

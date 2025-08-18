@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import {EventEmitter} from 'events';
 
 const bookmarkEvents = new EventEmitter();
 bookmarkEvents.setMaxListeners(30);

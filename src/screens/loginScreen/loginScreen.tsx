@@ -36,9 +36,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route, navigation}) => {
   const {loading, error} = useSelector((state: any) => state.auth);
 
   // Validation states
-  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username);
-  const isPasswordValid = password.length >= 6;
-  const canLogin = isEmailValid && isPasswordValid;
   const dispatch = useAppDispatch();
 
   const handleBack = () => {
@@ -228,11 +225,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderRadius: 15,
     // marginTop: 10
-  },
-  bottomText: {
-    color: colors.primary,
-    fontSize: 14,
-    fontWeight: '400',
   },
   dividerRow: {
     flexDirection: 'row',
