@@ -78,6 +78,7 @@ const OnboardingScreen = () => {
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
         ref={flatListRef}
+        removeClippedSubviews={false}
       />
 
       {/* Dots indicator */}

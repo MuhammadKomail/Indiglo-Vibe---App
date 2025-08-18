@@ -151,6 +151,7 @@ const CustomDropdown = ({
               <Text style={styles.itemText}>{item}</Text>
             </TouchableOpacity>
           )}
+          removeClippedSubviews={false}
         />
       </Animated.View>
     </View>

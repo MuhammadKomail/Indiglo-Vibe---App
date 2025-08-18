@@ -219,6 +219,7 @@ const SettingScreen = () => {
             onPress={() => handleAction(item)}
           />
         )}
+        removeClippedSubviews={false}
       />
     </ThemedView>
   );

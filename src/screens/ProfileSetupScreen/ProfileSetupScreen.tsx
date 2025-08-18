@@ -123,6 +123,7 @@ const ProfileSetupScreen: React.FC<
         columnWrapperStyle={{gap: 8}}
         contentContainerStyle={{gap: 8}}
         scrollEnabled={false}
+        removeClippedSubviews={false}
       />
     </View>
   );
@@ -209,6 +210,7 @@ const ProfileSetupScreen: React.FC<
           contentContainerStyle={styles.scrollContent}
           ListHeaderComponent={headerComponent}
           ListFooterComponent={footerComponent}
+          removeClippedSubviews={false}
         />
       </KeyboardAvoidingView>
     </ImageBackground>

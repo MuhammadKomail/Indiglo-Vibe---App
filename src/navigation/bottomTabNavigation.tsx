@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {BottomTabBarProps} from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/homeScreen/homeScreen';
-import ProfileScreen from '../screens/profileScreen/profileScreen';
+import HomeScreen from '../screens/HomeScreen/HomeScreen';
+import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
 import colors from '../styles/colors';
 import {RootStackParamList} from '../types/navigationTypes';
-import ChatScreen from '../screens/chatScreen/chatScreen';
+import ChatScreen from '../screens/ChatScreen/ChatScreen';
 import {useTranslation} from 'react-i18next';
 import {svgPath} from '../styles/svgPath';
 import LinearGradient from 'react-native-linear-gradient';

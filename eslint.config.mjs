@@ -1,4 +1,5 @@
-module.exports = {
+// eslint.config.mjs
+export default {
   root: true,
   parser: '@typescript-eslint/parser',
   extends: [
@@ -11,7 +12,7 @@ module.exports = {
   ],
   plugins: ['jest', '@typescript-eslint', 'react', 'react-native', 'prettier'],
   parserOptions: {
-    ecmaFeatures: {jsx: true},
+    ecmaFeatures: { jsx: true },
     ecmaVersion: 2020,
     sourceType: 'module',
   },
@@ -22,11 +23,11 @@ module.exports = {
     browser: true,
   },
   rules: {
-    'prettier/prettier': ['error', {semi: true}],
+    'prettier/prettier': ['error', { semi: true }],
     'no-console': 'error',
-    '@typescript-eslint/no-unused-vars': ['warn', {argsIgnorePattern: '^_'}],
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     'no-unused-vars': 'error',
-    quotes: [2, 'single', {avoidEscape: true}],
+    quotes: [2, 'single', { avoidEscape: true }],
     'react-native/split-platform-components': 'off',
     'react-native/no-raw-text': 'off',
     'react-native/no-single-element-style-arrays': 'off',
@@ -41,6 +42,6 @@ module.exports = {
     'react/no-unstable-nested-components': 'off',
   },
   settings: {
-    react: {version: 'detect'},
+    react: { version: 'detect' },
   },
 };

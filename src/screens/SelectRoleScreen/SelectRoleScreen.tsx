@@ -22,7 +22,9 @@ const SelectRoleScreen = ({navigation}: {navigation: any}) => {
             style={styles.buttonUser}
             backgroundGradient={[colors.blueHue2, colors.blueHue3]}
             textColor={colors.silver}
-            onPress={() => navigation.navigate('login-screen', {role: 'user'})}
+            onPress={() =>
+              navigation.navigate('login-screen', {role: 'mentor'})
+            }
           />
           <Button
             title="Share Your Light"

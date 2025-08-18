@@ -74,6 +74,7 @@ const HomeScreen = () => {
             gap: 20,
             marginBottom: 20,
           }}
+          removeClippedSubviews={false}
         />
 
         {/* Explore Section */}
@@ -91,6 +92,7 @@ const HomeScreen = () => {
           )}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{paddingHorizontal: 20, marginBottom: 25}}
+          removeClippedSubviews={false}
         />
       </ScrollView>
     </ThemedView>

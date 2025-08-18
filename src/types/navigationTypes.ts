@@ -13,6 +13,7 @@ export type RootStackParamList = {
   'message-screen': undefined;
   'create-chat-screen': undefined;
   'onboarding-screen': undefined;
+  SettingScreen: undefined;
   Home: undefined;
   Chat: undefined;
   Appointment: undefined;

@@ -41,6 +41,7 @@ const ChatScreen = () => {
       <FlatList
         data={messages}
         keyExtractor={item => item.id}
+        removeClippedSubviews={false}
         renderItem={({item}) => (
           <View
             style={[
