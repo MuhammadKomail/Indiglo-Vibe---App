@@ -19,9 +19,9 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-project 'BoilerPlate.xcodeproj'
+project 'IndiGloVibe.xcodeproj'
 
-target 'BoilerPlate' do
+target 'IndiGloVibe' do
   config = use_native_modules!
 
   use_react_native!(
@@ -30,7 +30,7 @@ target 'BoilerPlate' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'BoilerPlateTests' do
+  target 'IndiGloVibeTests' do
     inherit! :complete
     # Pods for testing
   end

@@ -1,7 +1,7 @@
-package com.boilerplate.app
+package com.indiglovibe.app
 
 import android.app.Application
-import com.boilerplate.app.BuildConfig
+import com.indiglovibe.app.BuildConfig
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
 import com.facebook.react.ReactHost
