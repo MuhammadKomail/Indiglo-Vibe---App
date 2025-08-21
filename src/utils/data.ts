@@ -213,3 +213,41 @@ export const specialties = [
   'LGBTQIA Support',
   'Purpose Finding',
 ];
+
+export const notifications = [
+  {
+    day: 'Today',
+    notifications: [
+      {
+        notification: 'Sofia, John and +19 others liked your post.',
+        time: '10m ago',
+        type: 'call',
+      },
+      {
+        notification: 'Sofia, John and +19 others liked your post.',
+        time: '10m ago',
+        type: 'chat',
+      },
+    ],
+  },
+  {
+    day: 'Yesterday',
+    notificationList: [
+      {
+        notification: 'Rebecca, Daisy and +11 others liked your post.',
+        time: '10m ago',
+        type: 'call',
+      },
+      {
+        notification: 'Sofia, John and +19 others liked your post.',
+        time: '10m ago',
+        type: 'chat',
+      },
+      {
+        notification: 'Sofia, John and +19 others liked your post.',
+        time: '10m ago',
+        type: 'chat',
+      },
+    ],
+  },
+];

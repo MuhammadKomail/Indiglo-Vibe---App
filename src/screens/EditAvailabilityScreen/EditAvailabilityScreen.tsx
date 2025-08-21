@@ -5,18 +5,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Switch,
-  ScrollView,
-  ImageBackground,
   FlatList,
 } from 'react-native';
-import MaterialIcons from '@react-native-vector-icons/material-icons';
 import colors from '../../styles/colors';
 import Button from '../../components/button';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../types/navigationTypes';
-import imagePath from '../../styles/imgPath';
 import {useNavigation} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import AppHeader from '../../components/AppHeader';

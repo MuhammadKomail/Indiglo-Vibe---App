@@ -16,7 +16,6 @@ import {DrawerNavigationProp} from '@react-navigation/drawer';
 import AppHeader from '../../components/AppHeader';
 
 const SetSpecialityScreen = () => {
-  const [bio, setBio] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const navigation = useNavigation<DrawerNavigationProp<any>>();
@@ -113,9 +112,6 @@ const SetSpecialityScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  backgroundImg: {
-    flex: 1,
-  },
   container: {
     marginTop: 30,
     flex: 1,
@@ -127,26 +123,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-  },
-  contentContainer: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-  backButton: {
-    position: 'absolute',
-    top: 70,
-    left: 20,
-    borderColor: colors.lightGray10,
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backIcon: {
-    marginLeft: 7,
   },
   title: {
     color: colors.blueHue,

@@ -44,7 +44,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
           </TouchableOpacity>
           {title && (
             <>
-              <ThemedText style={styles.headerTitle}>{title}!</ThemedText>
+              <ThemedText style={styles.headerTitle}>{title}</ThemedText>
               <ThemedText style={styles.headerTitle}> </ThemedText>
             </>
           )}

@@ -6,6 +6,7 @@ import MentorDetailScreen from '../screens/MentorDetailScreen/MentorDetailScreen
 import EditProfileScreen from '../screens/EditProfileScreen/EditProfileScreen';
 import SetSpecialityScreen from '../screens/SetSpecialityScreen/SetSpecialityScreen';
 import EditAvailabilityScreen from '../screens/EditAvailabilityScreen/EditAvailabilityScreen';
+import NotificationScreen from '../screens/NotificationScreen/NotificationScreen';
 
 export type MainStackParamList = {
   BottomTabs: undefined;
@@ -14,6 +15,7 @@ export type MainStackParamList = {
   EditProfileScreen: undefined;
   SetSpecialityScreen: undefined;
   EditAvailabilityScreen: undefined;
+  NotificationScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
@@ -33,6 +35,7 @@ const MainStackNavigation = () => {
         name="EditAvailabilityScreen"
         component={EditAvailabilityScreen}
       />
+      <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
     </Stack.Navigator>
   );
 };

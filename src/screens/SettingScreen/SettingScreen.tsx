@@ -69,7 +69,7 @@ const SettingScreen = () => {
     },
     {
       label: 'Notifications',
-      screen: 'Notifications',
+      screen: 'NotificationScreen',
       icon: <svgPath.NotificationSetting width={40} height={40} />,
     },
     {
@@ -119,7 +119,7 @@ const SettingScreen = () => {
     },
     {
       label: 'Notifications',
-      screen: 'Notifications',
+      screen: 'NotificationScreen',
       icon: <svgPath.NotificationSetting width={40} height={40} />,
     },
     {
