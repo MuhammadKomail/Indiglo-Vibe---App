@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   I18nManager,
+  Keyboard,
 } from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {BottomTabBarProps} from '@react-navigation/bottom-tabs';
@@ -19,6 +20,7 @@ import {svgPath} from '../styles/svgPath';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppSelector} from '../redux/store';
 import {RootState} from '../redux/store';
+import ChatListScreen from '../screens/ChatList/ChatList';
 
 const {width} = Dimensions.get('window');
 const Tab = createBottomTabNavigator<RootStackParamList>();
@@ -122,6 +124,36 @@ const CustomTabBar = (props: BottomTabBarProps) => {
   const {t} = useTranslation();
   const isRTL = I18nManager.isRTL;
   const {user} = useAppSelector((state: RootState) => state.auth);
+  const [keyboardVisible, setKeyboardVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      },
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
+  if (keyboardVisible) {
+    return null;
+  }
+  // Hide tab bar on ChatDetailScreen
+  const focusedRoute = state.routes[state.index];
+  if (focusedRoute?.name === 'ChatDetailScreen') {
+    return null;
+  }
   return (
     <View
       style={[
@@ -173,7 +205,7 @@ const CustomTabBar = (props: BottomTabBarProps) => {
           },
         ]}>
         <LinearGradient
-          colors={['#122187', '#1D2BC5']}
+          colors={[colors.blue, colors.blue2]}
           start={{x: 1, y: 0}}
           end={{x: 0, y: 1}}
           style={styles.middleButton}>
@@ -197,10 +229,19 @@ const BottomTab = () => {
       tabBar={props => <CustomTabBar {...props} />}>
       {/* Visible tabs */}
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Chat" component={ChatScreen} />
+      <Tab.Screen
+        name="Chat"
+        component={ChatListScreen}
+        options={{tabBarHideOnKeyboard: true}}
+      />
       <Tab.Screen name="Thread" component={HomeScreen} />
       <Tab.Screen name="Appointment" component={ProfileScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen
+        name="ChatDetailScreen"
+        component={ChatScreen}
+        options={{tabBarButton: () => null}}
+      />
     </Tab.Navigator>
   ) : (
     <Tab.Navigator
@@ -208,7 +249,11 @@ const BottomTab = () => {
       tabBar={props => <CustomTabBar {...props} />}>
       {/* Visible tabs */}
       <Tab.Screen name="Mentors" component={HomeScreen} />
-      <Tab.Screen name="Chat" component={ChatScreen} />
+      <Tab.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{tabBarHideOnKeyboard: true}}
+      />
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Appointment" component={ProfileScreen} />
       <Tab.Screen name="Thread" component={ProfileScreen} />

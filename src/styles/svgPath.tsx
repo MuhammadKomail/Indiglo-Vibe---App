@@ -30,6 +30,8 @@ import FilterIcon from '../assets/images/svg/filterIcon.svg';
 import Coins from '../assets/images/svg/coins.svg';
 import Message from '../assets/images/svg/message.svg';
 import Phone from '../assets/images/svg/phone.svg';
+import Incomming from '../assets/images/svg/incomming.svg';
+import Outgoing from '../assets/images/svg/outgoing.svg';
 
 export const svgPath = {
   MentorsBottom: MentorsBottom,
@@ -60,6 +62,8 @@ export const svgPath = {
   Message: Message,
   Coins: Coins,
   Phone: Phone,
+  Incoming: Incomming,
+  Outgoing: Outgoing,
 } as const;
 
 export type SvgPath = keyof typeof svgPath;

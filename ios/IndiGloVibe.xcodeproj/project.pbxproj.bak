@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,9 +15,7 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		977EBA120D1A9485CAFA709D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		E2340C29C5C97F3F8EE2CA31 /* Pods_IndiGloVibe_IndiGloVibeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C42F39C26C5C586DED182B /* Pods_IndiGloVibe_IndiGloVibeTests.framework */; };
-		F072A1F92E5F253400C0E4D1 /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F072A1F82E5F253400C0E4D1 /* PushKit.framework */; };
 		F0A947342E3DF0BC0003F1AB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F0A947332E3DF0BC0003F1AB /* GoogleService-Info.plist */; };
-		F0C85B622E62F44400DB233D /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0C85B612E62F44400DB233D /* CallKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,12 +59,14 @@
 		A4C42F39C26C5C586DED182B /* Pods_IndiGloVibe_IndiGloVibeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IndiGloVibe_IndiGloVibeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E291E6C5DC260FA679434EF3 /* Pods-IndiGloVibe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IndiGloVibe.debug.xcconfig"; path = "Target Support Files/Pods-IndiGloVibe/Pods-IndiGloVibe.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F072A1F82E5F253400C0E4D1 /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		F0A947332E3DF0BC0003F1AB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F0A947352E3DF0D80003F1AB /* IndiGloVibe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = IndiGloVibe.entitlements; path = IndiGloVibe/IndiGloVibe.entitlements; sourceTree = "<group>"; };
-		F0C85B612E62F44400DB233D /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		FAC46A29508665A888129F02 /* Pods-IndiGloVibe-IndiGloVibeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IndiGloVibe-IndiGloVibeTests.release.xcconfig"; path = "Target Support Files/Pods-IndiGloVibe-IndiGloVibeTests/Pods-IndiGloVibe-IndiGloVibeTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		F01618212E5C479A003C51E8 /* NotificationService */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = NotificationService; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		00E356EB1AD99517003FC87E /* Frameworks */ = {
@@ -81,8 +81,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0C85B622E62F44400DB233D /* CallKit.framework in Frameworks */,
-				F072A1F92E5F253400C0E4D1 /* PushKit.framework in Frameworks */,
 				2882367A45DA8A20EE4B961A /* Pods_IndiGloVibe.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -125,8 +123,6 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F0C85B612E62F44400DB233D /* CallKit.framework */,
-				F072A1F82E5F253400C0E4D1 /* PushKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				2943AB35635927655935A63E /* Pods_IndiGloVibe.framework */,
 				A4C42F39C26C5C586DED182B /* Pods_IndiGloVibe_IndiGloVibeTests.framework */,
@@ -148,6 +144,7 @@
 				13B07FAE1A68108700A75B9A /* IndiGloVibe */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* IndiGloVibeTests */,
+				F01618212E5C479A003C51E8 /* NotificationService */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,

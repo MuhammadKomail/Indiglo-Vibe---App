@@ -3,6 +3,8 @@ import {
   View,
   TouchableOpacity,
   ImageBackground,
+  Image,
+  Text,
 } from 'react-native';
 import React from 'react';
 import {colors, imgPath, svgPath} from '../styles/style';
@@ -12,13 +14,22 @@ import {useNavigation} from '@react-navigation/native';
 interface AppHeaderProps {
   title?: string;
   backIcon?: () => void;
+  user?: {
+    name: string;
+    avatar: string;
+    online: boolean;
+  };
 }
 
-const AppHeader: React.FC<AppHeaderProps> = ({title}) => {
+const AppHeader: React.FC<AppHeaderProps> = ({title, user, backIcon}) => {
   const navigation = useNavigation();
 
   const backClick = () => {
-    navigation.goBack();
+    if (backIcon) {
+      backIcon();
+    } else {
+      navigation.goBack();
+    }
   };
 
   return (
@@ -35,8 +46,33 @@ const AppHeader: React.FC<AppHeaderProps> = ({title}) => {
               style={{transform: [{rotate: '180deg'}]}}
             />
           </TouchableOpacity>
-          {title && (
-            <ThemedText style={styles.headerTitle}>{title}!</ThemedText>
+          {user ? (
+            <View style={styles.userInfoContainer}>
+              <ThemedText style={styles.headerTitle}>{user.name}</ThemedText>
+              <View style={styles.onlineContainer}>
+                <View
+                  style={[
+                    styles.onlineDot,
+                    {
+                      backgroundColor: user.online
+                        ? colors.green2
+                        : colors.graySystem,
+                    },
+                  ]}
+                />
+                <Text style={styles.onlineText}>
+                  {user.online ? 'Online' : 'Offline'}
+                </Text>
+              </View>
+            </View>
+          ) : (
+            title && <ThemedText style={styles.headerTitle}>{title}</ThemedText>
+          )}
+
+          {user ? (
+            <Image source={{uri: user.avatar}} style={styles.avatar} />
+          ) : (
+            <View style={styles.rightSpacer} />
           )}
         </View>
       </ImageBackground>
@@ -66,12 +102,38 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 70,
   },
+  userInfoContainer: {
+    alignItems: 'center',
+  },
+  onlineContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  onlineDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.green2,
+    marginRight: 5,
+  },
+  onlineText: {
+    color: colors.silver,
+    fontSize: 12,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  rightSpacer: {
+    width: 34, // Same width as the menu button to ensure title is centered
+  },
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: colors.silver,
-    maxWidth: '80%',
-    textAlign: 'left',
+    textAlign: 'center',
   },
   menuButton: {
     padding: 10,

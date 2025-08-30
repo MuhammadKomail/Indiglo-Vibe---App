@@ -28,6 +28,11 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 			<key>ajeek.qbscocloud.net</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
@@ -39,6 +44,10 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Microphone is required for voice and video calls.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera is required for video calls.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>EvilIcons.ttf</string>
@@ -51,6 +60,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
+		<string>voip</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

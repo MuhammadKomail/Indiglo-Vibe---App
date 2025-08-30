@@ -11,23 +11,101 @@ import i18n from './src/languageTranslation/index';
 import {setToastRef} from './src/utils/toast';
 import {ThemeProvider} from './src/theme/ThemeContext';
 import {initializeNotificationService} from './src/services/notificationService';
+import {NativeEventEmitter, NativeModules, Platform} from 'react-native';
+import appApi from './src/services/api';
 
 const ToastInitializer = () => {
   const toast = useToast();
-
   useEffect(() => {
-    setToastRef(toast); // Set the global toast reference
+    setToastRef(toast);
   }, [toast]);
-
   return null;
 };
 
 function App(): React.JSX.Element {
-  // const navigationRef = useRef<NavigationContainerRef<any>>(null);
-
   useEffect(() => {
     initializeNotificationService();
+
+    // Subscribe to iOS CallKit/PushKit native events
+    if (Platform.OS === 'ios' && NativeModules.CallKitBridge) {
+      const emitter = new NativeEventEmitter(NativeModules.CallKitBridge);
+      const subs = [
+        emitter.addListener('voipTokenReceived', async (info: any) => {
+          const token = info?.token as string;
+          if (!token) return;
+          // try {
+          // Adjust endpoint path to your backend route if different
+          await appApi.post('/api/device/register-voip-token', {token});
+          // console.log('[VoIP] Token registered');
+          // } catch (e) {
+          //   console.log(
+          //     '[VoIP] Failed to register token',
+          //     (e as any)?.message || e,
+          //   );
+          // }
+        }),
+        emitter.addListener('callAnswered', async (payload: any) => {
+          // try {
+          const {
+            acceptCall,
+          } = require('./src/redux/actions/callAction/callAction');
+          const meId = String(store.getState()?.auth?.user?.id || '');
+          const otherId = String(payload?.fromUserId || '');
+          const roomId = String(payload?.roomId || '');
+          if (meId && otherId && roomId) {
+            await (store.dispatch as any)(acceptCall({meId, otherId, roomId}));
+          }
+          const navigationService =
+            require('./src/navigation/navigationService').default;
+          // try {
+          navigationService.navigate('CallScreen');
+          // } catch {}
+          // } catch {}
+        }),
+        emitter.addListener('callEnded', async (payload: any) => {
+          // try {
+          const {
+            rejectCall,
+          } = require('./src/redux/actions/callAction/callAction');
+          const meId = String(store.getState()?.auth?.user?.id || '');
+          const otherId = String(payload?.fromUserId || '');
+          const roomId = String(payload?.roomId || '');
+          if (meId && otherId && roomId) {
+            await (store.dispatch as any)(
+              rejectCall({meId, otherId, roomId, reason: 'declined'}),
+            );
+          }
+          // } catch {}
+        }),
+      ];
+      return () => subs.forEach(s => s.remove());
+    }
+
+    // CallKeep initialization and related app state handling removed
+    // try {
+    //   callkeepService.init(store.dispatch as any);
+    // } catch (e) {
+    //   console.log('CallKeep init error', e);
+    // }
+    // const handleAppStateChange = (nextAppState: string) => {
+    //   if (nextAppState === 'active') {
+    //     checkPendingCalls();
+    //   }
+    // };
+    // const subscription = AppState.addEventListener('change', handleAppStateChange);
+    // return () => subscription?.remove();
   }, []);
+  // const checkPendingCalls = async () => {
+  //   try {
+  //     const pendingCall = mmkv.getString('pendingCall');
+  //     if (pendingCall) {
+  //       const callData = JSON.parse(pendingCall);
+  //       // Show incoming call UI via CallKeep (removed)
+  //     }
+  //   } catch (error) {
+  //     console.error('[App] Error checking pending calls:', error);
+  //   }
+  // };
 
   return (
     <ThemeProvider>

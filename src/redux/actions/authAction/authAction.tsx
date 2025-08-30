@@ -14,6 +14,7 @@ export const loginUser = createAsyncThunk(
 
       const response = {
         user: {
+          id: 1, // Dummy ID for now
           name: credentials.data.name,
           password: credentials.data.password,
           role: credentials.data.role,
