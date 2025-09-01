@@ -33,6 +33,21 @@ import Phone from '../assets/images/svg/phone.svg';
 import Menu from '../assets/images/svg/Menu.svg';
 import Clock from '../assets/images/svg/Clock.svg';
 import Date from '../assets/images/svg/Date.svg';
+import CardNumber from '../assets/images/svg/cardNumber.svg';
+import Expiry from '../assets/images/svg/Expiry.svg';
+import CVC from '../assets/images/svg/CVC.svg';
+import BackArrow from '../assets/images/svg/BackArrow.svg';
+import NextArrow from '../assets/images/svg/NextArrow.svg';
+import ReceivedArrow from '../assets/images/svg/receivedArrow.svg';
+import WithdrawArrow from '../assets/images/svg/WithdrawArrow.svg';
+import MyBalanceWhite from '../assets/images/svg/MyBalanceWhite.svg';
+import SelectBank from '../assets/images/svg/selectBank.svg';
+import DownArrow from '../assets/images/svg/DownArrow.svg';
+import AddIcon from '../assets/images/svg/addIcon.svg';
+import ImageIcon from '../assets/images/svg/ImageIcon.svg';
+import Passport from '../assets/images/svg/Passport.svg';
+import IdCard from '../assets/images/svg/IdCard.svg';
+import DriverLicense from '../assets/images/svg/DriverLicense.svg';
 
 export const svgPath = {
   MentorsBottom: MentorsBottom,
@@ -66,6 +81,21 @@ export const svgPath = {
   Menu: Menu,
   Clock: Clock,
   Date: Date,
+  CardNumber: CardNumber,
+  Expiry: Expiry,
+  CVC: CVC,
+  BackArrow: BackArrow,
+  NextArrow: NextArrow,
+  ReceivedArrow: ReceivedArrow,
+  WithdrawArrow: WithdrawArrow,
+  MyBalanceWhite: MyBalanceWhite,
+  SelectBank: SelectBank,
+  DownArrow: DownArrow,
+  AddIcon: AddIcon,
+  ImageIcon: ImageIcon,
+  Passport: Passport,
+  IdCard: IdCard,
+  DriverLicense: DriverLicense,
 } as const;
 
 export type SvgPath = keyof typeof svgPath;

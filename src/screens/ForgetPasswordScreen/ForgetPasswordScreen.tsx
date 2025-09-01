@@ -8,9 +8,8 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
-import {colors, imgPath} from '../../styles/style';
+import {colors, imgPath, svgPath} from '../../styles/style';
 import Button from '../../components/button';
-import MaterialIcons from '@react-native-vector-icons/material-icons';
 import Input from '../../components/Input';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../types/navigationTypes';
@@ -27,9 +26,28 @@ const ForgetPasswordScreen = ({
   const {role} = route.params;
 
   const [username, setUsername] = useState('');
+  const [error, setError] = useState('');
 
   const handleBack = () => {
     navigation.goBack();
+  };
+
+  const validateEmail = (email: string) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const handleRequestCode = () => {
+    if (!username) {
+      setError('Email is required');
+      return;
+    }
+    if (!validateEmail(username)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+    setError('');
+    navigation.navigate('enter-otp-screen', {role});
   };
 
   return (
@@ -42,12 +60,7 @@ const ForgetPasswordScreen = ({
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled">
           <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-            <MaterialIcons
-              name="arrow-back-ios"
-              size={16}
-              color={colors.blueHue}
-              style={styles.backIcon}
-            />
+            <svgPath.BackArrow width={12} height={12} />
           </TouchableOpacity>
           <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -63,6 +76,7 @@ const ForgetPasswordScreen = ({
                 placeholder="Enter your email address"
                 value={username}
                 onChangeText={setUsername}
+                error={error}
               />
             </View>
             <Button
@@ -70,7 +84,7 @@ const ForgetPasswordScreen = ({
               style={styles.buttonUser}
               backgroundGradient={[colors.blue, colors.blue2]}
               textColor={colors.silver}
-              onPress={() => navigation.navigate('enter-otp-screen', {role})}
+              onPress={handleRequestCode}
             />
           </View>
         </ScrollView>
@@ -93,17 +107,14 @@ const styles = StyleSheet.create({
     borderColor: colors.lightGray10,
     borderWidth: 1,
     borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
     textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'center',
   },
   formContainer: {
     marginTop: 20,
-  },
-  backIcon: {
-    marginLeft: 7,
   },
   container: {
     marginTop: 120,
@@ -113,11 +124,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // marginBottom: 10,
-  },
-  headerText: {
-    color: colors.blueHue,
-    fontSize: 16,
-    fontWeight: '400',
   },
   headerBox: {
     width: '90%',

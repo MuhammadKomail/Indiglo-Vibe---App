@@ -251,3 +251,222 @@ export const notifications = [
     ],
   },
 ];
+
+export const appointmentsData = {
+  upcoming: [
+    {
+      id: '1',
+      name: 'Ben Harvery',
+      date: 'Sunday, 12 June',
+      time: '11:00 – 12:30 AM',
+      type: 'call',
+      status: 'Call Now',
+    },
+    {
+      id: '2',
+      name: 'Ben Harvery',
+      date: 'Sunday, 12 June',
+      time: '11:00 – 12:30 AM',
+      type: 'chat',
+      status: 'Chat',
+    },
+    {
+      id: '3',
+      name: 'Ben Harvery',
+      date: 'Sunday, 12 June',
+      time: '11:00 – 12:30 AM',
+      type: 'call',
+      status: 'Call',
+    },
+  ],
+  completed: [
+    {
+      id: '4',
+      name: 'Ben Harvery',
+      date: 'Sunday, 12 June',
+      time: '11:00 – 12:30 AM',
+      status: 'Reschedule',
+      type: 'call',
+    },
+    {
+      id: '5',
+      name: 'Ben Harvery',
+      date: 'Sunday, 12 June',
+      time: '11:00 – 12:30 AM',
+      status: 'Reschedule',
+      type: 'chat',
+    },
+  ],
+  requested: [
+    {
+      id: '6',
+      name: 'Ben Harvery',
+      date: 'Sunday, 12 June',
+      time: '11:00 – 12:30 AM',
+      status: 'Pending',
+      type: 'call',
+    },
+    {
+      id: '7',
+      name: 'Ben Harvery',
+      date: 'Sunday, 12 June',
+      time: '11:00 – 12:30 AM',
+      status: 'Pending',
+      type: 'chat',
+    },
+  ],
+};
+
+export const mentorAppointmentsData = {
+  upcoming: [
+    {
+      id: '1',
+      name: 'Ben Harvery',
+      date: 'Sunday, 12 June',
+      time: '11:00 – 12:30 AM',
+      type: 'call',
+      status: 'Join Now',
+    },
+    {
+      id: '2',
+      name: 'Ben Harvery',
+      date: 'Sunday, 12 June',
+      time: '11:00 – 12:30 AM',
+      type: 'chat',
+      status: 'Chat',
+    },
+    {
+      id: '3',
+      name: 'Ben Harvery',
+      date: 'Sunday, 12 June',
+      time: '11:00 – 12:30 AM',
+      type: 'call',
+      status: 'Call',
+    },
+  ],
+  completed: [],
+  requested: [
+    {
+      id: '6',
+      name: 'Ben Harvery',
+      date: 'Sunday, 12 June',
+      time: '11:00 – 12:30 AM',
+      status: 'View Details',
+      type: 'View Details',
+    },
+    {
+      id: '7',
+      name: 'Ben Harvery',
+      date: 'Sunday, 12 June',
+      time: '11:00 – 12:30 AM',
+      status: 'View Details',
+      type: 'View Details',
+    },
+  ],
+};
+
+export const earningsData = [
+  {id: 1, type: 'Received', amount: 20, date: 'Jan 4 2025, 11:40 AM'},
+  {id: 2, type: 'Received', amount: 20, date: 'Jan 4 2025, 11:40 AM'},
+  {id: 3, type: 'Withdraw', amount: -100, date: 'Jan 4 2025, 11:40 AM'},
+  {id: 4, type: 'Received', amount: 10, date: 'Jan 4 2025, 11:40 AM'},
+  {id: 5, type: 'Received', amount: 10, date: 'Jan 4 2025, 11:40 AM'},
+  {id: 6, type: 'Received', amount: 20, date: 'Jan 4 2025, 11:40 AM'},
+  {id: 7, type: 'Withdraw', amount: -100, date: 'Jan 4 2025, 11:40 AM'},
+  {id: 8, type: 'Received', amount: 20, date: 'Jan 4 2025, 11:40 AM'},
+];
+
+export const banks = [
+  'Bank of America',
+  'JPMorgan Chase',
+  'Wells Fargo',
+  'Citibank',
+  'U.S. Bank',
+  'PNC Bank',
+  'Capital One',
+  'Truist Bank',
+  'TD Bank',
+  'Goldman Sachs Bank USA',
+  'Morgan Stanley Bank',
+  'HSBC Bank USA',
+  'Fifth Third Bank',
+  'KeyBank',
+  'Regions Bank',
+  'Citizens Bank',
+  'Santander Bank',
+  'Ally Bank',
+  'American Express Bank',
+  'First Republic Bank',
+];
+
+export const articles = [
+  {
+    title: 'How to stop overthinking?',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod',
+    date: 'Jan 4, 2025',
+    image: imagePath.Article1,
+  },
+  {
+    title: 'How to stop overthinking?',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod',
+    date: 'Jan 4, 2025',
+    image: imagePath.Article1,
+  },
+  {
+    title: 'How to stop overthinking?',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod',
+    date: 'Jan 4, 2025',
+    image: imagePath.Article1,
+  },
+];
+
+export const discoverItems = [
+  {
+    title: 'Self-help Articles',
+    button: 'Articles',
+    image: imagePath.Discover1,
+    route: 'ArticlesScreen',
+    headerTitle: 'Articles',
+  },
+  {
+    title: 'Mental Health Tips',
+    button: 'Tips',
+    image: imagePath.Discover2,
+    route: 'ArticlesScreen',
+    headerTitle: 'Tips',
+  },
+  {
+    title: 'Mindfulness Exercises',
+    button: 'Exercises',
+    image: imagePath.Discover3,
+    route: 'ArticlesScreen',
+    headerTitle: 'Exercises',
+  },
+  {
+    title: 'Find A Mentor',
+    button: 'Mentors',
+    image: imagePath.Discover4,
+    route: 'Mentors',
+  },
+];
+
+export const findMentorData = [
+  {
+    key: 'call',
+    title: 'Call $20/30 mins',
+    desc: 'Speak directly with your mentor for immediate support.',
+  },
+  {
+    key: 'chat',
+    title: 'Chat $10/mins',
+    desc: 'Start a conversation via text for flexible communication.',
+  },
+  {
+    key: 'schedule',
+    title: 'Schedule An Appointment',
+    desc: 'Pick a time that works for you to connect with your mentor.',
+  },
+];

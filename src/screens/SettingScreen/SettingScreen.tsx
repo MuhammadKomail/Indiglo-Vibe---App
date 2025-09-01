@@ -5,7 +5,6 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Text,
 } from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -20,8 +19,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../redux/actions/authAction/authAction';
 import {ThemedText} from '../../components/ThemedText';
 import {RootState} from '../../redux/store';
-
-type Role = 'mentor' | 'user';
+import DeleteModal from '../../components/DeleteModal';
 
 interface OptionType {
   label: string;
@@ -39,8 +37,7 @@ const SettingScreen = () => {
   const navigation = useNavigation<DrawerNavigationProp<any>>();
   const [availableNow, setAvailableNow] = useState(false);
   const [goAnonymous, setGoAnonymous] = useState(false);
-
-  const backIcon = () => navigation.goBack();
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   const mentorOptions: OptionType[] = [
     {
@@ -64,7 +61,7 @@ const SettingScreen = () => {
     },
     {
       label: 'My Articles',
-      screen: 'MyArticles',
+      screen: 'ArticlesScreen',
       icon: <svgPath.MyArticle width={40} height={40} />,
     },
     {
@@ -74,12 +71,12 @@ const SettingScreen = () => {
     },
     {
       label: 'Change Password',
-      screen: 'ChangePassword',
+      screen: 'ChangePasswordScreen',
       icon: <svgPath.ChangePassword width={40} height={40} />,
     },
     {
       label: 'My Earning',
-      screen: 'MyEarning',
+      screen: 'MyEarningsScreen',
       icon: <svgPath.MyEarnings width={40} height={40} />,
     },
     {
@@ -124,12 +121,12 @@ const SettingScreen = () => {
     },
     {
       label: 'Change Password',
-      screen: 'ChangePassword',
+      screen: 'ChangePasswordScreen',
       icon: <svgPath.ChangePassword width={40} height={40} />,
     },
     {
       label: 'Payment Details',
-      screen: 'PaymentDetails',
+      screen: 'PaymentDetailScreen',
       icon: <svgPath.MyEarnings width={40} height={40} />,
     },
     {
@@ -163,18 +160,7 @@ const SettingScreen = () => {
         {text: 'Log Out', onPress: () => dispatch(logout())},
       ]);
     } else if (item.type === 'delete') {
-      Alert.alert(
-        'Confirm Delete',
-        'This action cannot be undone. Delete account?',
-        [
-          {text: 'Cancel', style: 'cancel'},
-          {
-            text: 'Delete',
-            style: 'destructive',
-            onPress: () => console.log('Account Deleted'),
-          },
-        ],
-      );
+      setIsDeleteModalVisible(true);
     } else if (item.screen) {
       navigation.navigate(item.screen as never);
     }
@@ -193,7 +179,7 @@ const SettingScreen = () => {
 
   return (
     <ThemedView style={styles.mainContainer}>
-      <AppHeader backIcon={backIcon} />
+      <AppHeader />
       <View style={styles.profileContainer}>
         <Image source={imagePath.profileUser} style={styles.profileImage} />
         <TouchableOpacity
@@ -219,6 +205,20 @@ const SettingScreen = () => {
             onPress={() => handleAction(item)}
           />
         )}
+        removeClippedSubviews={false}
+      />
+      <DeleteModal
+        visible={isDeleteModalVisible}
+        headerImage={imagePath.DeleteAccount}
+        imageStyling={styles.headerImage}
+        title={'Are You Sure You Want To Delete Your Account?'}
+        onClose={() => {
+          setIsDeleteModalVisible(false);
+        }}
+        bottonText={'Cancel'}
+        onSubmit={() => {
+          setIsDeleteModalVisible(false);
+        }}
       />
     </ThemedView>
   );
@@ -267,5 +267,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 15,
     padding: 8,
+  },
+  headerImage: {
+    width: 124,
+    height: 145,
+    marginTop: 10,
+    marginBottom: 10,
   },
 });

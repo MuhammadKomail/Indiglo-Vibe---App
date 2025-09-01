@@ -16,7 +16,6 @@ import {useAppDispatch} from '../redux/store';
 import {logout} from '../redux/actions/authAction/authAction';
 import {useTheme} from '../theme/ThemeContext';
 import {showToast} from '../utils/toast';
-import {tokenStorage} from '../services/storage';
 import {ThemedIcon} from '../components/ThemedIcon';
 import {lightTheme} from '../theme/theme';
 import {useTranslation} from 'react-i18next';

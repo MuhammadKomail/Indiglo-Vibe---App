@@ -40,18 +40,19 @@ const EditAvailabilityScreen = () => {
   const navigation = useNavigation<DrawerNavigationProp<any>>();
 
   const [availability, setAvailability] = useState<AvailabilityType>({
-    mon: {enabled: true, from: '00:00', to: '23:59'},
-    tue: {enabled: true, from: '00:00', to: '23:59'},
+    mon: {enabled: false, from: '00:00', to: '23:59'},
+    tue: {enabled: false, from: '00:00', to: '23:59'},
     wed: {enabled: false, from: '00:00', to: '23:59'},
     thu: {enabled: false, from: '00:00', to: '23:59'},
-    fri: {enabled: true, from: '00:00', to: '23:59'},
+    fri: {enabled: false, from: '00:00', to: '23:59'},
     sat: {enabled: false, from: '00:00', to: '23:59'},
-    sun: {enabled: true, from: '00:00', to: '23:59'},
+    sun: {enabled: false, from: '00:00', to: '23:59'},
   });
 
   const [pickerVisible, setPickerVisible] = useState(false);
   const [pickerDayKey, setPickerDayKey] = useState<DayKey>('mon');
   const [pickerField, setPickerField] = useState<'from' | 'to'>('from');
+  const [error, setError] = useState<string>('');
 
   const handleToggle = (dayKey: DayKey) => {
     setAvailability(prev => ({
@@ -75,12 +76,40 @@ const EditAvailabilityScreen = () => {
     setPickerVisible(false);
   };
 
-  const handleBack = () => {
-    navigation.goBack();
+  // validation
+  const validateAvailability = () => {
+    setError('');
+    let isValid = true;
+
+    // check at least one enabled
+    const enabledDays = Object.values(availability).filter(day => day.enabled);
+    if (enabledDays.length === 0) {
+      setError('Please enable availability for at least one day.');
+      isValid = false;
+    }
+
+    // check times
+    enabledDays.forEach(day => {
+      if (!day.from || !day.to) {
+        setError('Please select both From and To times for all enabled days.');
+        isValid = false;
+      } else {
+        const fromMoment = moment(day.from, 'HH:mm');
+        const toMoment = moment(day.to, 'HH:mm');
+        if (!toMoment.isAfter(fromMoment)) {
+          setError('End time must be after start time.');
+          isValid = false;
+        }
+      }
+    });
+
+    return isValid;
   };
 
   const handleNext = () => {
-    navigation.goBack();
+    if (validateAvailability()) {
+      navigation.goBack();
+    }
   };
 
   const renderItem = ({item}: {item: (typeof days)[0]}) => {
@@ -124,6 +153,8 @@ const EditAvailabilityScreen = () => {
   const FooterComponent = () => {
     return (
       <View style={styles.renderView}>
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
         <Button
           title={'Update Schedule'}
           style={styles.buttonUser}
@@ -145,7 +176,7 @@ const EditAvailabilityScreen = () => {
 
   return (
     <>
-      <AppHeader title="Set Schedule" backIcon={handleBack} />
+      <AppHeader title="Set Schedule" height={140} />
       <FlatList
         data={days}
         keyExtractor={(item: (typeof days)[0]) => item.key}
@@ -159,9 +190,6 @@ const EditAvailabilityScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  backgroundImg: {
-    flex: 1,
-  },
   container: {
     flexGrow: 1,
   },
@@ -172,35 +200,6 @@ const styles = StyleSheet.create({
   renderView: {
     flex: 1,
     marginHorizontal: 20,
-  },
-  backButton: {
-    position: 'absolute',
-    top: 70,
-    left: 20,
-    borderColor: colors.lightGray10,
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backIcon: {
-    marginLeft: 7,
-  },
-  header: {
-    color: colors.blueHue,
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  sub: {
-    color: colors.blueHue,
-    fontSize: 12,
-    fontWeight: '400',
-    opacity: 0.6,
-    marginBottom: 20,
-    marginTop: 5,
   },
   dayRow: {marginBottom: 10},
   dayTitleWrapper: {
@@ -245,6 +244,12 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginTop: 20,
     marginBottom: 25,
+  },
+  errorText: {
+    color: colors.red,
+    fontSize: 12,
+    fontWeight: '400',
+    marginBottom: 10,
   },
 });
 

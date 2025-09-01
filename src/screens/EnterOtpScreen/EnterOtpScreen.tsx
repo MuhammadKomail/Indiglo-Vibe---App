@@ -9,9 +9,8 @@ import {
   KeyboardAvoidingView,
   TextInput,
 } from 'react-native';
-import {colors, imgPath} from '../../styles/style';
+import {colors, imgPath, svgPath} from '../../styles/style';
 import Button from '../../components/button';
-import MaterialIcons from '@react-native-vector-icons/material-icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../types/navigationTypes';
 
@@ -24,11 +23,13 @@ const EnterOtpScreen = ({navigation, route}: EnterOtpScreenProps) => {
   const {role} = route.params;
   const [otp, setOtp] = useState(['', '', '', '']);
   const [timer, setTimer] = useState(60);
+  const [error, setError] = useState('');
+
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
   // Timer countdown
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
+    let interval: ReturnType<typeof setInterval> | null = null;
     if (timer > 0) {
       interval = setInterval(() => setTimer(prev => prev - 1), 1000);
     }
@@ -41,17 +42,19 @@ const EnterOtpScreen = ({navigation, route}: EnterOtpScreenProps) => {
     if (text.length > 1) return;
 
     const newOtp = [...otp];
-    newOtp[index] = text;
+    newOtp[index] = text.replace(/[^0-9]/g, ''); // only digits allowed
     setOtp(newOtp);
 
     if (text && index < 3) {
       inputRefs.current[index + 1]?.focus();
     }
+    if (error) setError('');
   };
 
   const handleResend = () => {
     setTimer(60);
-    // Add your resend OTP API logic here
+    setError('');
+    setOtp(['', '', '', '']);
   };
   const handleBack = () => {
     navigation.goBack();
@@ -59,10 +62,14 @@ const EnterOtpScreen = ({navigation, route}: EnterOtpScreenProps) => {
 
   const verifyOtp = () => {
     const fullOtp = otp.join('');
-    if (fullOtp.length === 4) {
-      // Add your OTP verification logic here
-      navigation.navigate('reset-password-screen', {role});
+    if (fullOtp.length < 4) {
+      setError('Please enter the 4-digit OTP code');
+      return;
     }
+
+    // ✅ OTP valid → continue
+    setError('');
+    navigation.navigate('reset-password-screen', {role});
   };
 
   return (
@@ -78,12 +85,7 @@ const EnterOtpScreen = ({navigation, route}: EnterOtpScreenProps) => {
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled">
           <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-            <MaterialIcons
-              name="arrow-back-ios"
-              size={16}
-              color={colors.blueHue}
-              style={styles.backIcon}
-            />
+            <svgPath.BackArrow width={12} height={12} />
           </TouchableOpacity>
           <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -104,10 +106,20 @@ const EnterOtpScreen = ({navigation, route}: EnterOtpScreenProps) => {
                   maxLength={1}
                   value={digit}
                   onChangeText={text => handleOtpChange(text, index)}
-                  // returnKeyType="next"
+                  onKeyPress={({nativeEvent}) => {
+                    if (
+                      nativeEvent.key === 'Backspace' &&
+                      !otp[index] &&
+                      index > 0
+                    ) {
+                      inputRefs.current[index - 1]?.focus();
+                    }
+                  }}
                 />
               ))}
             </View>
+
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
             <View style={styles.resendContainer}>
               <TouchableOpacity onPress={handleResend} disabled={timer > 0}>
@@ -152,14 +164,11 @@ const styles = StyleSheet.create({
     borderColor: colors.lightGray10,
     borderWidth: 1,
     borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
     textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  backIcon: {
-    marginLeft: 7,
   },
   container: {
     marginTop: 120,
@@ -169,11 +178,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // marginBottom: 10,
-  },
-  headerText: {
-    color: colors.blueHue,
-    fontSize: 16,
-    fontWeight: '400',
   },
   headerBox: {
     width: '90%',
@@ -240,6 +244,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderRadius: 15,
     marginTop: 100,
+  },
+  errorText: {
+    color: colors.red,
+    fontSize: 12,
+    marginBottom: 8,
+    marginLeft: 24,
+    marginTop: 8,
   },
 });
 

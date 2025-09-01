@@ -38,7 +38,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>EvilIcons.ttf</string>
@@ -46,58 +46,6 @@
 		<string>FontAwesome6_Regular.ttf</string>
 		<string>FontAwesome6_Solid.ttf</string>
 		<string>MaterialIcons.ttf</string>
-		<string>Mulish-Black.ttf</string>
-		<string>Mulish-BlackItalic.ttf</string>
-		<string>Mulish-Bold.ttf</string>
-		<string>Mulish-BoldItalic.ttf</string>
-		<string>Mulish-ExtraBold.ttf</string>
-		<string>Mulish-ExtraBoldItalic.ttf</string>
-		<string>Mulish-ExtraLight.ttf</string>
-		<string>Mulish-ExtraLightItalic.ttf</string>
-		<string>Mulish-Italic.ttf</string>
-		<string>Mulish-Light.ttf</string>
-		<string>Mulish-LightItalic.ttf</string>
-		<string>Mulish-Medium.ttf</string>
-		<string>Mulish-MediumItalic.ttf</string>
-		<string>Mulish-Regular.ttf</string>
-		<string>Mulish-SemiBold.ttf</string>
-		<string>Mulish-SemiBoldItalic.ttf</string>
-		<string>OpenSans-Bold.ttf</string>
-		<string>OpenSans-BoldItalic.ttf</string>
-		<string>OpenSans-ExtraBold.ttf</string>
-		<string>OpenSans-ExtraBoldItalic.ttf</string>
-		<string>OpenSans-Italic.ttf</string>
-		<string>OpenSans-Light.ttf</string>
-		<string>OpenSans-LightItalic.ttf</string>
-		<string>OpenSans-Medium.ttf</string>
-		<string>OpenSans-MediumItalic.ttf</string>
-		<string>OpenSans-Regular.ttf</string>
-		<string>OpenSans-SemiBold.ttf</string>
-		<string>OpenSans-SemiBoldItalic.ttf</string>
-		<string>OpenSans_Condensed-Bold.ttf</string>
-		<string>OpenSans_Condensed-BoldItalic.ttf</string>
-		<string>OpenSans_Condensed-ExtraBold.ttf</string>
-		<string>OpenSans_Condensed-ExtraBoldItalic.ttf</string>
-		<string>OpenSans_Condensed-Italic.ttf</string>
-		<string>OpenSans_Condensed-Light.ttf</string>
-		<string>OpenSans_Condensed-LightItalic.ttf</string>
-		<string>OpenSans_Condensed-Medium.ttf</string>
-		<string>OpenSans_Condensed-MediumItalic.ttf</string>
-		<string>OpenSans_Condensed-Regular.ttf</string>
-		<string>OpenSans_Condensed-SemiBold.ttf</string>
-		<string>OpenSans_Condensed-SemiBoldItalic.ttf</string>
-		<string>OpenSans_SemiCondensed-Bold.ttf</string>
-		<string>OpenSans_SemiCondensed-BoldItalic.ttf</string>
-		<string>OpenSans_SemiCondensed-ExtraBold.ttf</string>
-		<string>OpenSans_SemiCondensed-ExtraBoldItalic.ttf</string>
-		<string>OpenSans_SemiCondensed-Italic.ttf</string>
-		<string>OpenSans_SemiCondensed-Light.ttf</string>
-		<string>OpenSans_SemiCondensed-LightItalic.ttf</string>
-		<string>OpenSans_SemiCondensed-Medium.ttf</string>
-		<string>OpenSans_SemiCondensed-MediumItalic.ttf</string>
-		<string>OpenSans_SemiCondensed-Regular.ttf</string>
-		<string>OpenSans_SemiCondensed-SemiBold.ttf</string>
-		<string>OpenSans_SemiCondensed-SemiBoldItalic.ttf</string>
 		<string>Ionicons.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>

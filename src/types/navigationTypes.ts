@@ -3,8 +3,8 @@ export type RootStackParamList = {
   'login-screen': {role?: string};
   'signup-screen': {role?: string};
   'reset-password-screen': {role?: string};
-  'availability-screen': {role?: string};
-  'profile-setup-screen': {role?: string};
+  'availability-screen': {role?: string; name?: string; password?: string};
+  'profile-setup-screen': {role?: string; name?: string; password?: string};
   'home-tabs': {screen?: string};
   'offline-screen': undefined;
   'chat-screen': undefined;
@@ -13,9 +13,14 @@ export type RootStackParamList = {
   'message-screen': undefined;
   'create-chat-screen': undefined;
   'onboarding-screen': undefined;
+  'subscription-screen': {role?: string; name?: string; password?: string};
+  'subscribe-payment-screen': {role?: string; name?: string; password?: string};
+  'verify-identity-screen': undefined;
+  'select-verification-type-screen': undefined;
+  SettingScreen: undefined;
   Home: undefined;
   Chat: undefined;
-  Appointment: undefined;
+  Appointment: {activeTab?: 'upcoming' | 'completed' | 'requested'};
   Thread: undefined;
   Mentors: undefined;
   Profile: undefined;

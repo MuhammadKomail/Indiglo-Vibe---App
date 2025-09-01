@@ -7,7 +7,6 @@ import Button from '../../components/button';
 import SpecialitiesList from '../../components/SpecialitiesList';
 import BottomPanel from '../../components/BottomPanel';
 import MentorHeader from '../../components/MentorHeader';
-import imagePath from '../../styles/imgPath';
 import {mentorData} from '../../utils/data';
 
 const MentorDetailScreen = () => {
@@ -47,7 +46,7 @@ const MentorDetailScreen = () => {
         onBack={backIcon}
         onChat={() => openPanel('chat')}
         onCall={() => openPanel('call')}
-        onSchedule={() => console.log('Schedule Appointment')}
+        onSchedule={() => navigation.navigate('ScheduleScreen')}
       />
 
       {/* About Me */}
@@ -64,7 +63,7 @@ const MentorDetailScreen = () => {
           style={styles.buttonUser}
           backgroundGradient={[colors.blue, colors.blue2]}
           textColor={colors.silver}
-          onPress={() => console.log('Schedule Appointment')}
+          onPress={() => navigation.navigate('ScheduleScreen')}
         />
       </View>
 

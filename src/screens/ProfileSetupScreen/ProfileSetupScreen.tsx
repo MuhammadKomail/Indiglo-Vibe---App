@@ -7,33 +7,70 @@ import {
   TouchableOpacity,
   FlatList,
   KeyboardAvoidingView,
-  Platform,
   ImageBackground,
 } from 'react-native';
 import imagePath from '../../styles/imgPath';
-import MaterialIcons from '@react-native-vector-icons/material-icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../types/navigationTypes';
 import colors from '../../styles/colors';
 import Button from '../../components/button';
 import {sections} from '../../utils/data';
+import AuthHeader from '../../components/AuthHeader';
+import {loginUser} from '../../redux/actions/authAction/authAction';
+import {useAppDispatch} from '../../redux/store';
 
 const ProfileSetupScreen: React.FC<
   NativeStackScreenProps<RootStackParamList, 'profile-setup-screen'>
 > = ({route, navigation}) => {
-  const {role} = route.params;
+  const {role, name, password} = route.params;
+
+  const dispatch = useAppDispatch();
+
   const [bio, setBio] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const handleBack = () => {
-    navigation.goBack();
+  // error states
+  const [bioError, setBioError] = useState('');
+  const [tagsError, setTagsError] = useState('');
+
+  const validateForm = () => {
+    let isValid = true;
+    setBioError('');
+    setTagsError('');
+
+    if (role === 'mentor') {
+      if (!bio.trim()) {
+        setBioError('Bio is required');
+        isValid = false;
+      } else if (bio.trim().length < 20) {
+        setBioError('Bio must be at least 20 characters long');
+        isValid = false;
+      }
+    }
+
+    if (selectedTags.length === 0) {
+      setTagsError(
+        role === 'user'
+          ? 'Please select at least one topic you need help with'
+          : 'Please select at least one area you can help with',
+      );
+      isValid = false;
+    }
+
+    return isValid;
   };
 
   const handleNext = () => {
-    if (role === 'user') {
-      // navigation.navigate('availability-screen', { role: role });
-    } else {
-      navigation.navigate('availability-screen', {role: role});
+    if (validateForm()) {
+      if (role === 'user') {
+        dispatch(loginUser({data: {name: name!, password: password!, role}}));
+      } else {
+        navigation.navigate('availability-screen', {
+          name: name!,
+          password: password!,
+          role,
+        });
+      }
     }
   };
 
@@ -69,6 +106,7 @@ const ProfileSetupScreen: React.FC<
         columnWrapperStyle={{gap: 8}}
         contentContainerStyle={{gap: 8}}
         scrollEnabled={false}
+        removeClippedSubviews={false}
       />
     </View>
   );
@@ -76,15 +114,7 @@ const ProfileSetupScreen: React.FC<
   const headerComponent = () => {
     return (
       <>
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <MaterialIcons
-            name="arrow-back-ios"
-            size={16}
-            color={colors.blueHue}
-            style={styles.backIcon}
-          />
-        </TouchableOpacity>
-
+        <AuthHeader />
         <View style={styles.container}>
           <Text style={styles.title}>
             {role === 'user'
@@ -101,7 +131,10 @@ const ProfileSetupScreen: React.FC<
             <>
               <Text style={styles.label}>Bio</Text>
               <TextInput
-                style={styles.bioInput}
+                style={[
+                  styles.bioInput,
+                  {borderColor: bioError ? colors.red : colors.blueHue4},
+                ]}
                 multiline
                 numberOfLines={4}
                 placeholder="Tell the user about yourself"
@@ -110,7 +143,11 @@ const ProfileSetupScreen: React.FC<
                 textAlignVertical="top"
                 placeholderTextColor={colors.black20}
               />
-              <Text style={styles.title}>
+              {bioError ? (
+                <Text style={styles.errorText}>{bioError}</Text>
+              ) : null}
+
+              <Text style={styles.title2}>
                 Tell Users What You Can Help With
               </Text>
               <Text style={styles.subtitle}>
@@ -127,6 +164,7 @@ const ProfileSetupScreen: React.FC<
   const footerComponent = () => {
     return (
       <View style={styles.renderContainer}>
+        {tagsError ? <Text style={styles.errorText}>{tagsError}</Text> : null}
         <Button
           title={role === 'user' ? 'Get Started' : 'Next'}
           style={styles.buttonUser}
@@ -145,7 +183,7 @@ const ProfileSetupScreen: React.FC<
       resizeMode="cover">
       <KeyboardAvoidingView
         style={{flex: 1}}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        // behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={80}>
         <FlatList
           data={sections}
@@ -155,6 +193,7 @@ const ProfileSetupScreen: React.FC<
           contentContainerStyle={styles.scrollContent}
           ListHeaderComponent={headerComponent}
           ListFooterComponent={footerComponent}
+          removeClippedSubviews={false}
         />
       </KeyboardAvoidingView>
     </ImageBackground>
@@ -177,27 +216,13 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
   },
-  contentContainer: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-  backButton: {
-    position: 'absolute',
-    top: 70,
-    left: 20,
-    borderColor: colors.lightGray10,
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backIcon: {
-    marginLeft: 7,
-  },
   title: {
+    color: colors.blueHue,
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  title2: {
+    marginTop: 24,
     color: colors.blueHue,
     fontSize: 16,
     fontWeight: '500',
@@ -214,16 +239,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     marginBottom: 6,
-    color: '#333',
+    color: colors.blueHue,
   },
   bioInput: {
+    flex: 1,
     height: 100, // or any value like 120, depending on your design
     borderWidth: 1,
     borderColor: colors.blueHue4,
     borderRadius: 8,
-    marginBottom: 24,
     padding: 10,
-    textAlignVertical: 'top', // ensure this is also here
   },
   sectionBlock: {
     marginBottom: 10,
@@ -263,9 +287,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // marginHorizontal: 10,
     borderRadius: 15,
-    marginTop: 20,
+    marginTop: 25,
     marginBottom: 25,
   },
+  errorText: {color: colors.red, marginTop: 4, marginLeft: 4, fontSize: 12},
 });
 
 export default ProfileSetupScreen;

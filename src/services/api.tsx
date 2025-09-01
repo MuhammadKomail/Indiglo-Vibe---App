@@ -21,35 +21,28 @@ const api: AxiosInstance = axios.create({
 // Function to refresh tokens
 // Function to refresh tokens with enhanced logging
 const refreshAuthToken = async (): Promise<boolean> => {
-  try {
-    const refreshToken = tokenStorage.getRefreshToken();
-    const accessToken = tokenStorage.getToken();
+  const refreshToken = tokenStorage.getRefreshToken();
+  const accessToken = tokenStorage.getToken();
 
-    if (!refreshToken || !accessToken) {
-      return false;
-    }
+  if (!refreshToken || !accessToken) {
+    return false;
+  }
 
-    const response = await axios.post(
-      `${BASE_URL}/Auth/IAuthFeature/RefreshToken`,
-      {accessToken, refreshToken},
-      {headers: {'Content-Type': 'application/json'}},
-    );
+  const response = await axios.post(
+    `${BASE_URL}/Auth/IAuthFeature/RefreshToken`,
+    {accessToken, refreshToken},
+    {headers: {'Content-Type': 'application/json'}},
+  );
 
-    // Check for the response structure with nested data property
-    if (response.status === 200 && response.data && response.data.data) {
-      const {accessToken: newAccessToken, refreshToken: newRefreshToken} =
-        response.data.data;
+  // Check for the response structure with nested data property
+  if (response.status === 200 && response.data && response.data.data) {
+    const {accessToken: newAccessToken, refreshToken: newRefreshToken} =
+      response.data.data;
 
-      if (newAccessToken && newRefreshToken) {
-        tokenStorage.saveToken(newAccessToken);
-        tokenStorage.saveRefreshToken(newRefreshToken);
-        return true;
-      } else {
-      }
-    } else {
-    }
-  } catch (error: any) {
-    if (error.response) {
+    if (newAccessToken && newRefreshToken) {
+      tokenStorage.saveToken(newAccessToken);
+      tokenStorage.saveRefreshToken(newRefreshToken);
+      return true;
     }
   }
 
@@ -89,7 +82,6 @@ api.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newToken}`;
           return api(originalRequest); // Retry the original request
         }
-      } else {
       }
     }
 

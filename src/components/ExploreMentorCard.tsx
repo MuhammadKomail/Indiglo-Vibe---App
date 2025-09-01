@@ -2,11 +2,9 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import colors from '../styles/colors';
-import imagePath from '../styles/imgPath';
 import {svgPath} from '../styles/svgPath';
 
 interface ExploreCardProps {
-  id: string;
   name: string;
   description: string;
   avatar: any;
@@ -14,7 +12,6 @@ interface ExploreCardProps {
 }
 
 const ExploreMentorCard: React.FC<ExploreCardProps> = ({
-  id,
   name,
   description,
   avatar,
@@ -35,9 +32,9 @@ const ExploreMentorCard: React.FC<ExploreCardProps> = ({
           <TouchableOpacity style={styles.iconButton}>
             <svgPath.Message />
           </TouchableOpacity>
-          {/* <TouchableOpacity style={styles.iconButton}>
-                    </TouchableOpacity> */}
-          <TouchableOpacity style={styles.scheduleButton}>
+          <TouchableOpacity
+            style={styles.scheduleButton}
+            onPress={() => navigation.navigate('ScheduleScreen')}>
             <svgPath.CalendarBottom />
             <Text style={styles.scheduleText}>Schedule</Text>
           </TouchableOpacity>
@@ -58,7 +55,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     marginBottom: 12,
-    shadowColor: '#000',
+    shadowColor: colors.black,
     shadowOpacity: 0.05,
     shadowRadius: 5,
     elevation: 2,

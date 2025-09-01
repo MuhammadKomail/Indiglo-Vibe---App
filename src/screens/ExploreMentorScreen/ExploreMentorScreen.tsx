@@ -8,20 +8,24 @@ import AppHeader from '../../components/AppHeader';
 import HomeSearch from '../../components/homeSearch';
 import ExploreMentorCard from '../../components/ExploreMentorCard';
 import {mentorsData} from '../../utils/data';
+import MentorOptionsModal from '../../components/MentorOptionsModal';
 
 const ExploreMentorScreen = () => {
   const navigation = useNavigation<DrawerNavigationProp<any>>();
   const [activeTab, setActiveTab] = useState<'all' | 'my'>('all');
+  const [isModalVisible, setModalVisible] = useState(false);
 
-  const backIcon = () => navigation.goBack();
+  const backPress = () => {
+    navigation.navigate('Home');
+  };
 
   return (
     <ThemedView style={styles.mainContainer}>
-      <AppHeader backIcon={backIcon} title="Explore Mentors" />
+      <AppHeader title="Explore Mentors" height={140} backPress={backPress} />
       <HomeSearch
         iconBackgroundColor={colors.primary}
-        iconColor={colors.white}
         searchbarBackground={colors.offWhite}
+        onFilterPress={() => setModalVisible(true)}
       />
 
       {/* Tabs */}
@@ -58,6 +62,10 @@ const ExploreMentorScreen = () => {
           <ExploreMentorCard {...item} navigation={navigation} />
         )}
         contentContainerStyle={{padding: 16}}
+      />
+      <MentorOptionsModal
+        visible={isModalVisible}
+        onClose={() => setModalVisible(false)}
       />
     </ThemedView>
   );

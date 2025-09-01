@@ -8,17 +8,16 @@ import {
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 import {colors, imgPath} from '../../styles/style';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../types/navigationTypes';
 import Button from '../../components/button';
-import MaterialIcons from '@react-native-vector-icons/material-icons';
 import Input from '../../components/Input';
 import {ThemedText} from '../../components/ThemedText';
 import imagePath from '../../styles/imgPath';
 import InputTextPhoneNumber from '../../components/InputTextPhoneNumber';
+import AuthHeader from '../../components/AuthHeader';
 
 type SignupScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -34,6 +33,12 @@ const SignupScreen: React.FC<SignupScreenProps> = ({route, navigation}) => {
   const [countryCode, setCountryCode] = useState('+1');
   const [phoneNumber, setPhoneNumber] = useState('');
 
+  // Error states
+  const [usernameError, setUsernameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+
   const handlePhoneInputChange = (
     newCountryCode: string,
     newPhoneNumber: string,
@@ -42,16 +47,63 @@ const SignupScreen: React.FC<SignupScreenProps> = ({route, navigation}) => {
     setPhoneNumber(newPhoneNumber);
   };
 
-  const handleBack = () => {
-    navigation.goBack();
-  };
+  const validateForm = () => {
+    let isValid = true;
+    setUsernameError('');
+    setEmailError('');
+    setPasswordError('');
+    setPhoneError('');
 
-  const handleForgotPassword = () => {
-    navigation.navigate('onboarding-screen');
+    // Username validation
+    if (!username.trim()) {
+      setUsernameError('Username is required');
+      isValid = false;
+    } else if (username.length < 3) {
+      setUsernameError('Username must be at least 3 characters long');
+      isValid = false;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      setEmailError('Email is required');
+      isValid = false;
+    } else if (!emailRegex.test(email)) {
+      setEmailError('Please enter a valid email address');
+      isValid = false;
+    }
+
+    // Password validation
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!password.trim()) {
+      setPasswordError('Password is required');
+      isValid = false;
+    } else if (!passwordRegex.test(password)) {
+      setPasswordError(
+        'Password must be at least 8 characters long and contain uppercase, lowercase, and a digit',
+      );
+      isValid = false;
+    }
+
+    // Phone validation
+    if (!phoneNumber.trim()) {
+      setPhoneError('Phone number is required');
+      isValid = false;
+    } else if (phoneNumber.length < 10) {
+      setPhoneError('Phone number must be at least 10 digits');
+      isValid = false;
+    }
+    return isValid;
   };
 
   const handleSignup = () => {
-    navigation.navigate('login-screen', {role: role});
+    if (validateForm()) {
+      navigation.navigate('profile-setup-screen', {
+        name: username,
+        password,
+        role,
+      });
+    }
   };
 
   return (
@@ -66,14 +118,7 @@ const SignupScreen: React.FC<SignupScreenProps> = ({route, navigation}) => {
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled">
-          <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-            <MaterialIcons
-              name="arrow-back-ios"
-              size={16}
-              color={colors.blueHue}
-              style={styles.backIcon}
-            />
-          </TouchableOpacity>
+          <AuthHeader />
           <View style={styles.container}>
             <View style={styles.headerContainer}>
               <Text style={styles.headerText}>Welcome To</Text>
@@ -95,6 +140,7 @@ const SignupScreen: React.FC<SignupScreenProps> = ({route, navigation}) => {
               placeholder="Enter your username"
               value={username}
               onChangeText={setUsername}
+              error={usernameError}
             />
             <Input
               title="Password"
@@ -102,31 +148,32 @@ const SignupScreen: React.FC<SignupScreenProps> = ({route, navigation}) => {
               value={password}
               onChangeText={setPassword}
               secureTextEntry={true}
+              error={passwordError}
             />
             <Input
               title="Email"
               placeholder="Enter your email"
               value={email}
               onChangeText={setEmail}
+              error={emailError}
             />
             <InputTextPhoneNumber
               textLable="Phone Number"
               countryCode={countryCode}
               phoneNumber={phoneNumber}
               onChangeText={handlePhoneInputChange}
+              error={phoneError}
             />
             <Button
-              title="Sign In"
+              title="Sign Up"
               style={styles.buttonUser}
               backgroundGradient={[colors.blue, colors.blue2]}
               textColor={colors.silver}
-              onPress={() =>
-                navigation.navigate('profile-setup-screen', {role: role})
-              }
+              onPress={handleSignup}
             />
             <View style={styles.dividerRow}>
               <View style={styles.blackDivider} />
-              <ThemedText style={styles.orText}>Sign In with</ThemedText>
+              <ThemedText style={styles.orText}>Sign Up with</ThemedText>
               <View style={styles.blackDivider} />
             </View>
             <View style={styles.socialRow}>
@@ -158,22 +205,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-  },
-  backButton: {
-    position: 'absolute',
-    top: 70,
-    left: 20,
-    borderColor: colors.lightGray10,
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backIcon: {
-    marginLeft: 7,
   },
   container: {
     marginTop: 120,
@@ -212,13 +243,6 @@ const styles = StyleSheet.create({
     color: colors.blueHue,
     fontSize: 16,
     fontWeight: '500',
-  },
-  forgotText: {
-    color: colors.primary,
-    // fontWeight: '600',
-    textAlign: 'right',
-    marginBottom: 20,
-    marginRight: 20,
   },
   buttonUser: {
     width: '95%',

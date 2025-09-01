@@ -70,8 +70,10 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
         onPress={onClose}>
         <View style={styles.contentBox}>
           <Image source={headerImage} style={imageStyling} />
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.description}>{description}</Text>
+          <Text style={[styles.title, {marginBottom: description ? 8 : 16}]}>
+            {title}
+          </Text>
+          {description && <Text style={styles.description}>{description}</Text>}
           <Button
             title={bottonText}
             style={styles.buttonUser}
@@ -88,7 +90,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: colors.black20,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -105,7 +107,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.black2,
     textAlign: 'center',
-    marginBottom: 8,
   },
   description: {
     fontSize: 14,

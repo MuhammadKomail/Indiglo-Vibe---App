@@ -9,17 +9,19 @@ import {
 } from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {BottomTabBarProps} from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/homeScreen/homeScreen';
-import ProfileScreen from '../screens/profileScreen/profileScreen';
+import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import colors from '../styles/colors';
 import {RootStackParamList} from '../types/navigationTypes';
-import ChatScreen from '../screens/chatScreen/chatScreen';
+import ChatScreen from '../screens/ChatScreen/ChatScreen';
 import {useTranslation} from 'react-i18next';
 import {svgPath} from '../styles/svgPath';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppSelector} from '../redux/store';
 import {RootState} from '../redux/store';
 import ExploreMentorScreen from '../screens/ExploreMentorScreen/ExploreMentorScreen';
+import AppointmentScreen from '../screens/AppointmentScreen/AppointmentScreen';
+import DiscoverScreen from '../screens/DiscoverScreen/DiscoverScreen';
+import SettingScreen from '../screens/SettingScreen/SettingScreen';
 
 const {width} = Dimensions.get('window');
 const Tab = createBottomTabNavigator<RootStackParamList>();
@@ -27,7 +29,6 @@ const Tab = createBottomTabNavigator<RootStackParamList>();
 const getIconComponent = (routeName: string, focused: boolean) => {
   switch (routeName) {
     case 'Mentors': {
-      console.log('svgPath.MentorsBottom:', svgPath.MentorsBottom);
       const IconComponent = svgPath.MentorsBottom;
       return (
         <IconComponent
@@ -124,7 +125,6 @@ const CustomTabBar = (props: BottomTabBarProps) => {
   const {t} = useTranslation();
   const isRTL = I18nManager.isRTL;
   const {user} = useAppSelector((state: RootState) => state.auth);
-  console.log('user', user);
   return (
     <View
       style={[
@@ -201,9 +201,9 @@ const BottomTab = () => {
       {/* Visible tabs */}
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Chat" component={ChatScreen} />
-      <Tab.Screen name="Thread" component={HomeScreen} />
-      <Tab.Screen name="Appointment" component={ProfileScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Thread" component={DiscoverScreen} />
+      <Tab.Screen name="Appointment" component={AppointmentScreen} />
+      <Tab.Screen name="Profile" component={SettingScreen} />
     </Tab.Navigator>
   ) : (
     <Tab.Navigator
@@ -214,8 +214,8 @@ const BottomTab = () => {
       <Tab.Screen name="Mentors" component={ExploreMentorScreen} />
       <Tab.Screen name="Chat" component={ChatScreen} />
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Appointment" component={ProfileScreen} />
-      <Tab.Screen name="Thread" component={ProfileScreen} />
+      <Tab.Screen name="Appointment" component={AppointmentScreen} />
+      <Tab.Screen name="Thread" component={DiscoverScreen} />
     </Tab.Navigator>
   );
 };
@@ -259,12 +259,6 @@ const styles = StyleSheet.create({
     color: colors.gray,
     fontSize: 12,
     marginTop: 5,
-  },
-  middleText: {
-    color: colors.gray,
-    fontSize: 12,
-    // marginTop: 5,
-    textAlign: 'center',
   },
   focusedText: {
     color: colors.primary,

@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 
-const LANGUAGE_KEY = 'selectedLanguage';
-
 const CustomDropdown = ({
   data,
   onSelect,
@@ -151,6 +149,7 @@ const CustomDropdown = ({
               <Text style={styles.itemText}>{item}</Text>
             </TouchableOpacity>
           )}
+          removeClippedSubviews={false}
         />
       </Animated.View>
     </View>

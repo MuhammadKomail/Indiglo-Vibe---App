@@ -18,6 +18,7 @@ interface InputProps extends TextInputProps {
   backgroundColor?: string;
   unfocusedBorderColor?: string;
   title?: string;
+  error?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -27,11 +28,18 @@ const Input: React.FC<InputProps> = ({
   backgroundColor,
   unfocusedBorderColor,
   title,
+  error,
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = !!secureTextEntry;
+
+  const borderColor = error
+    ? colors.red // 🔹 Red if error
+    : isFocused
+      ? colors.primary // 🔹 Primary when focused
+      : unfocusedBorderColor || colors.blueHue4;
 
   return (
     <View style={[styles.container, containerStyle]}>
@@ -41,7 +49,7 @@ const Input: React.FC<InputProps> = ({
           styles.input,
           {
             backgroundColor: backgroundColor || 'transparent',
-            borderColor: unfocusedBorderColor || colors.blueHue4,
+            borderColor,
           },
           isFocused && styles.inputFocused,
           inputStyle,
@@ -66,6 +74,8 @@ const Input: React.FC<InputProps> = ({
           />
         </TouchableOpacity>
       )}
+
+      {error ? <ThemedText style={styles.errorText}>{error}</ThemedText> : null}
     </View>
   );
 };
@@ -81,7 +91,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: 16,
     color: colors.black,
-    marginBottom: 16,
+    marginBottom: 6,
     borderWidth: 1,
   },
   inputFocused: {
@@ -91,7 +101,7 @@ const styles = StyleSheet.create({
   eyeBtn: {
     position: 'absolute',
     right: 20,
-    bottom: -6,
+    bottom: -13,
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
@@ -107,7 +117,13 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: colors.black2,
     marginBottom: 8,
-    marginTop: 4,
+    marginTop: 8,
+  },
+  errorText: {
+    color: colors.red,
+    marginLeft: 4,
+    width: '90%',
+    fontSize: 14,
   },
 });
 

@@ -2,7 +2,6 @@ import {
   StyleSheet,
   View,
   TextInput,
-  I18nManager,
   Platform,
   TouchableOpacity,
 } from 'react-native';
@@ -10,22 +9,17 @@ import React from 'react';
 import Icon from '@react-native-vector-icons/ionicons';
 import colors from '../styles/colors';
 import typography from '../styles/typography';
-import ButtonWithIcon from './ButtonWithIcon';
 import {svgPath} from '../styles/svgPath';
 
 const HomeSearch = ({
   iconBackgroundColor,
-  iconColor,
   searchbarBackground,
+  onFilterPress,
 }: {
   iconBackgroundColor: string;
-  iconColor: string;
   searchbarBackground?: string;
+  onFilterPress?: () => void;
 }) => {
-  const ViewDetail = () => {
-    return;
-  };
-
   return (
     <View style={styles.searchContainer}>
       <View
@@ -44,7 +38,7 @@ const HomeSearch = ({
       </View>
       <TouchableOpacity
         style={[styles.button, {backgroundColor: iconBackgroundColor}]}
-        onPress={ViewDetail}>
+        onPress={onFilterPress}>
         <svgPath.FilterIcon />
       </TouchableOpacity>
     </View>
@@ -65,7 +59,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.white,
     borderRadius: 15,
-    // paddingVertical: 4,
     paddingHorizontal: 8,
     ...Platform.select({
       ios: {
@@ -92,7 +85,6 @@ const styles = StyleSheet.create({
     margin: 4,
   },
   searchInput: {
-    // flex: 1,
     width: '70%',
     color: colors.black,
     fontFamily: typography.fontFamilies.mullish,

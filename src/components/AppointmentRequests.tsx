@@ -9,24 +9,24 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import colors from '../styles/colors';
-import imagePath from '../styles/imgPath';
 import {svgPath} from '../styles/svgPath';
 import {requests} from '../utils/data';
-
-interface Request {
-  id: string;
-  name: string;
-  date: string;
-  time: string;
-  image: any;
-}
+import {useNavigation} from '@react-navigation/native';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 
 const AppointmentRequests = () => {
+  const navigation = useNavigation<DrawerNavigationProp<any>>();
+
   return (
     <View>
       <View style={styles.header}>
         <Text style={styles.sectionTitle}>Appointment Request</Text>
-        <Text style={styles.sectionAll}>See All</Text>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('Appointment', {activeTab: 'requested'})
+          }>
+          <Text style={styles.sectionAll}>See All</Text>
+        </TouchableOpacity>
       </View>
       <FlatList
         data={requests}
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginHorizontal: 20,
     marginBottom: 10,
-    shadowColor: '#000',
+    shadowColor: colors.black,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 2,

@@ -2,7 +2,6 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import colors from '../styles/colors';
-import imagePath from '../styles/imgPath';
 
 interface ExploreCardProps {
   name: string;
@@ -39,7 +38,7 @@ const styles = StyleSheet.create({
   shadowContainer: {
     backgroundColor: colors.white,
     borderRadius: 8,
-    shadowColor: '#000',
+    shadowColor: colors.black,
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,

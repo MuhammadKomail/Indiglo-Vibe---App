@@ -2,18 +2,10 @@ import React from 'react';
 import {StyleSheet, Text, View, FlatList} from 'react-native';
 import colors from '../../styles/colors';
 import {notifications} from '../../utils/data';
-import {useNavigation} from '@react-navigation/native';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
 import AppHeader from '../../components/AppHeader';
 import NotificationBox from '../../components/NotificationBox';
 
 const NotificationScreen = () => {
-  const navigation = useNavigation<DrawerNavigationProp<any>>();
-
-  const handleBack = () => {
-    navigation.goBack();
-  };
-
   const renderSectionItem = ({item}: {item: (typeof notifications)[0]}) => {
     const list = item.notificationList || item.notifications || [];
     return (
@@ -37,7 +29,7 @@ const NotificationScreen = () => {
 
   return (
     <>
-      <AppHeader title="Notifications" backIcon={handleBack} height={140} />
+      <AppHeader title="Notifications" height={140} />
       <FlatList
         data={notifications}
         keyExtractor={(item, index) => item.day + index}

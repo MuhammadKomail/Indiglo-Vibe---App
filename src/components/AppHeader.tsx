@@ -1,31 +1,41 @@
 import {
   StyleSheet,
   View,
-  Image,
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
 import React from 'react';
 import {colors, imgPath, svgPath} from '../styles/style';
 import {ThemedText} from './ThemedComponents';
-import ButtonWithIcon from './ButtonWithIcon';
 import {useNavigation} from '@react-navigation/native';
 
 interface AppHeaderProps {
   title?: string;
-  backIcon?: () => void;
   height?: number;
+  addIcon?: boolean;
+  editButton?: boolean;
+  addIconClick?: () => void;
+  editButtonClick?: () => void;
+  backPress?: () => void;
 }
 
 const AppHeader: React.FC<AppHeaderProps> = ({
   title,
-  backIcon,
   height = 160,
+  addIcon = false,
+  editButton = false,
+  addIconClick,
+  editButtonClick,
+  backPress,
 }) => {
   const navigation = useNavigation();
 
   const backClick = () => {
-    navigation.goBack();
+    if (backPress) {
+      backPress();
+    } else {
+      navigation.goBack();
+    }
   };
 
   return (
@@ -42,10 +52,33 @@ const AppHeader: React.FC<AppHeaderProps> = ({
               style={{transform: [{rotate: '180deg'}]}}
             />
           </TouchableOpacity>
-          {title && (
+          {title && !addIcon && (
             <>
               <ThemedText style={styles.headerTitle}>{title}</ThemedText>
               <ThemedText style={styles.headerTitle}> </ThemedText>
+            </>
+          )}
+          {addIcon && (
+            <>
+              <ThemedText style={styles.headerTitle}>{title}</ThemedText>
+              <TouchableOpacity
+                onPress={addIconClick}
+                style={styles.menuButton}>
+                <svgPath.AddIcon
+                  width={12}
+                  height={12}
+                  style={{transform: [{rotate: '180deg'}]}}
+                />
+              </TouchableOpacity>
+            </>
+          )}
+          {editButton && (
+            <>
+              <ThemedText style={styles.headerTitle}> </ThemedText>
+              <ThemedText style={styles.headerTitle}>{title}</ThemedText>
+              <TouchableOpacity onPress={editButtonClick}>
+                <ThemedText style={styles.editButton}>{'Edit'}</ThemedText>
+              </TouchableOpacity>
             </>
           )}
         </View>
@@ -81,6 +114,11 @@ const styles = StyleSheet.create({
     color: colors.silver,
     maxWidth: '80%',
     textAlign: 'left',
+  },
+  editButton: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: colors.white,
   },
   menuButton: {
     padding: 10,

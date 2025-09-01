@@ -1,13 +1,5 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, FlatList} from 'react-native';
 import colors from '../../styles/colors';
 import Button from '../../components/button';
 import {sections} from '../../utils/data';
@@ -17,14 +9,16 @@ import AppHeader from '../../components/AppHeader';
 
 const SetSpecialityScreen = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [interestsError, setInterestsError] = useState('');
 
   const navigation = useNavigation<DrawerNavigationProp<any>>();
 
-  const handleBack = () => {
-    navigation.goBack();
-  };
-
   const handleNext = () => {
+    setInterestsError('');
+    if (selectedTags.length === 0) {
+      setInterestsError('Please select at least one interest');
+      return;
+    }
     navigation.goBack();
   };
 
@@ -81,6 +75,9 @@ const SetSpecialityScreen = () => {
   const footerComponent = () => {
     return (
       <View style={styles.renderContainer}>
+        {interestsError ? (
+          <Text style={styles.errorText}>{interestsError}</Text>
+        ) : null}
         <Button
           title={'Update'}
           style={styles.buttonUser}
@@ -93,11 +90,8 @@ const SetSpecialityScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={80}>
-      <AppHeader title="Set Specialties" backIcon={handleBack} />
+    <>
+      <AppHeader title="Set Specialties" height={140} />
       <FlatList
         data={sections}
         keyExtractor={(item, index) => item.title + index}
@@ -107,7 +101,7 @@ const SetSpecialityScreen = () => {
         ListHeaderComponent={headerComponent}
         ListFooterComponent={footerComponent}
       />
-    </KeyboardAvoidingView>
+    </>
   );
 };
 
@@ -136,21 +130,6 @@ const styles = StyleSheet.create({
     opacity: 0.6,
     marginBottom: 20,
     marginTop: 5,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 6,
-    color: '#333',
-  },
-  bioInput: {
-    height: 100, // or any value like 120, depending on your design
-    borderWidth: 1,
-    borderColor: colors.blueHue4,
-    borderRadius: 8,
-    marginBottom: 24,
-    padding: 10,
-    textAlignVertical: 'top', // ensure this is also here
   },
   sectionBlock: {
     marginBottom: 10,
@@ -188,10 +167,13 @@ const styles = StyleSheet.create({
     height: 56,
     justifyContent: 'center',
     alignItems: 'center',
-    // marginHorizontal: 10,
     borderRadius: 15,
     marginTop: 20,
     marginBottom: 25,
+  },
+  errorText: {
+    color: colors.red,
+    fontSize: 12,
   },
 });
 

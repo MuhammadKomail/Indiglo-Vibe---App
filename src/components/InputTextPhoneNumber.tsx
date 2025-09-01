@@ -20,6 +20,7 @@ interface InputTextPhoneNumberProps {
   countryCode?: string;
   phoneNumber?: string;
   sendPackage?: boolean;
+  error?: string;
 }
 
 const InputTextPhoneNumber: React.FC<InputTextPhoneNumberProps> = ({
@@ -31,6 +32,7 @@ const InputTextPhoneNumber: React.FC<InputTextPhoneNumberProps> = ({
   countryCode = '',
   phoneNumber = '',
   sendPackage = false,
+  error,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -38,6 +40,12 @@ const InputTextPhoneNumber: React.FC<InputTextPhoneNumberProps> = ({
     const numericText = text.replace(/[^0-9]/g, '');
     onChangeText(countryCode, numericText);
   };
+
+  const borderColor = error
+    ? colors.red // 🔹 Red if error
+    : isFocused
+      ? colors.primary
+      : colors.blueHue4;
 
   return (
     <View style={[styles.container, viewStyle]}>
@@ -51,7 +59,7 @@ const InputTextPhoneNumber: React.FC<InputTextPhoneNumberProps> = ({
           style={[
             styles.countryCodeInput,
             {
-              borderColor: isFocused ? colors.primary : colors.blueHue4,
+              borderColor,
             },
             textInputStyle,
           ]}
@@ -65,7 +73,7 @@ const InputTextPhoneNumber: React.FC<InputTextPhoneNumberProps> = ({
           style={[
             styles.phoneNumberInput,
             {
-              borderColor: isFocused ? colors.primary : colors.blueHue4,
+              borderColor,
             },
             textInputStyle,
           ]}
@@ -78,6 +86,7 @@ const InputTextPhoneNumber: React.FC<InputTextPhoneNumberProps> = ({
           placeholderTextColor={colors.black20}
         />
       </View>
+      {error ? <ThemedText style={styles.errorText}>{error}</ThemedText> : null}
     </View>
   );
 };
@@ -91,7 +100,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
     color: colors.black2,
-    marginBottom: 8,
+    // marginBottom: 4,
     marginTop: 4,
   },
   inputRow: {
@@ -120,6 +129,13 @@ const styles = StyleSheet.create({
     color: colors.black,
     borderWidth: 1,
     flex: 1,
+  },
+  errorText: {
+    marginTop: 6,
+    color: colors.red,
+    marginLeft: 4,
+    width: '90%',
+    fontSize: 14,
   },
 });
 

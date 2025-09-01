@@ -5,11 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Switch,
-  ScrollView,
   ImageBackground,
   FlatList,
 } from 'react-native';
-import MaterialIcons from '@react-native-vector-icons/material-icons';
 import colors from '../../styles/colors';
 import Button from '../../components/button';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -17,6 +15,7 @@ import moment from 'moment';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../types/navigationTypes';
 import imagePath from '../../styles/imgPath';
+import AuthHeader from '../../components/AuthHeader';
 
 type DayKey = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 
@@ -42,21 +41,22 @@ const days = [
 const AvailabilityScreen: React.FC<
   NativeStackScreenProps<RootStackParamList, 'availability-screen'>
 > = ({route, navigation}) => {
-  const {role} = route.params;
+  const {role, name, password} = route.params;
 
   const [availability, setAvailability] = useState<AvailabilityType>({
-    mon: {enabled: true, from: '00:00', to: '23:59'},
-    tue: {enabled: true, from: '00:00', to: '23:59'},
+    mon: {enabled: false, from: '00:00', to: '23:59'},
+    tue: {enabled: false, from: '00:00', to: '23:59'},
     wed: {enabled: false, from: '00:00', to: '23:59'},
     thu: {enabled: false, from: '00:00', to: '23:59'},
-    fri: {enabled: true, from: '00:00', to: '23:59'},
+    fri: {enabled: false, from: '00:00', to: '23:59'},
     sat: {enabled: false, from: '00:00', to: '23:59'},
-    sun: {enabled: true, from: '00:00', to: '23:59'},
+    sun: {enabled: false, from: '00:00', to: '23:59'},
   });
 
   const [pickerVisible, setPickerVisible] = useState(false);
   const [pickerDayKey, setPickerDayKey] = useState<DayKey>('mon');
   const [pickerField, setPickerField] = useState<'from' | 'to'>('from');
+  const [error, setError] = useState<string>('');
 
   const handleToggle = (dayKey: DayKey) => {
     setAvailability(prev => ({
@@ -80,30 +80,50 @@ const AvailabilityScreen: React.FC<
     setPickerVisible(false);
   };
 
-  const handleBack = () => {
-    navigation.goBack();
+  // validation
+  const validateAvailability = () => {
+    setError('');
+    let isValid = true;
+
+    // check at least one enabled
+    const enabledDays = Object.values(availability).filter(day => day.enabled);
+    if (enabledDays.length === 0) {
+      setError('Please enable availability for at least one day.');
+      isValid = false;
+    }
+
+    // check times
+    enabledDays.forEach(day => {
+      if (!day.from || !day.to) {
+        setError('Please select both From and To times for all enabled days.');
+        isValid = false;
+      } else {
+        const fromMoment = moment(day.from, 'HH:mm');
+        const toMoment = moment(day.to, 'HH:mm');
+        if (!toMoment.isAfter(fromMoment)) {
+          setError('End time must be after start time.');
+          isValid = false;
+        }
+      }
+    });
+
+    return isValid;
   };
 
   const handleNext = () => {
-    if (role === 'user') {
-      navigation.navigate('availability-screen', {role: role});
-    } else {
-      navigation.navigate('availability-screen', {role: role});
+    if (validateAvailability()) {
+      navigation.navigate('subscription-screen', {
+        name: name!,
+        password: password!,
+        role,
+      });
     }
   };
 
   const headerComponent = () => {
     return (
       <>
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <MaterialIcons
-            name="arrow-back-ios"
-            size={16}
-            color={colors.blueHue}
-            style={styles.backIcon}
-          />
-        </TouchableOpacity>
-
+        <AuthHeader />
         <View style={styles.containerView}>
           <Text style={styles.header}>Set Availability</Text>
           <Text style={styles.sub}>
@@ -156,6 +176,7 @@ const AvailabilityScreen: React.FC<
   const FooterComponent = () => {
     return (
       <View style={styles.renderView}>
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
         <Button
           title={'Update Schedule'}
           style={styles.buttonUser}
@@ -207,22 +228,6 @@ const styles = StyleSheet.create({
   renderView: {
     flex: 1,
     marginHorizontal: 20,
-  },
-  backButton: {
-    position: 'absolute',
-    top: 70,
-    left: 20,
-    borderColor: colors.lightGray10,
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backIcon: {
-    marginLeft: 7,
   },
   header: {
     color: colors.blueHue,
@@ -280,6 +285,12 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginTop: 20,
     marginBottom: 25,
+  },
+  errorText: {
+    color: colors.red,
+    fontSize: 12,
+    fontWeight: '400',
+    marginBottom: 10,
   },
 });
 

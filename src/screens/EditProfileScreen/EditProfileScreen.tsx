@@ -5,9 +5,9 @@ import {
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
-  Platform,
   FlatList,
   Text,
+  TextInput,
 } from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -24,8 +24,7 @@ import Input from '../../components/Input';
 import InputTextPhoneNumber from '../../components/InputTextPhoneNumber';
 import Button from '../../components/button';
 import {specialties} from '../../utils/data';
-
-type Role = 'mentor' | 'user';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 const EditProfileScreen = () => {
   const {user} = useSelector((state: RootState) => state.auth);
@@ -37,8 +36,16 @@ const EditProfileScreen = () => {
   const [countryCode, setCountryCode] = useState('+1');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [bio, setBio] = useState('');
+  const [profileImage, setProfileImage] = useState<any>(imagePath.profileUser);
+  const [imageError, setImageError] = useState('');
 
-  const backIcon = () => navigation.goBack();
+  // Error states
+  const [usernameError, setUsernameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [bioError, setBioError] = useState('');
+  const [interestsError, setInterestsError] = useState('');
 
   const handlePhoneInputChange = (
     newCountryCode: string,
@@ -68,21 +75,127 @@ const EditProfileScreen = () => {
     );
   };
 
+  const validateForm = () => {
+    let isValid = true;
+
+    // Reset all errors
+    setUsernameError('');
+    setEmailError('');
+    setPhoneError('');
+    setBioError('');
+    setInterestsError('');
+    setImageError('');
+
+    // Profile image validation
+    if (!profileImage?.uri) {
+      setImageError('Profile image is required');
+      isValid = false;
+    }
+
+    // Username validation
+    if (!username.trim()) {
+      setUsernameError('Username is required');
+      isValid = false;
+    } else if (username.length < 3) {
+      setUsernameError('Username must be at least 3 characters long');
+      isValid = false;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      setEmailError('Email is required');
+      isValid = false;
+    } else if (!emailRegex.test(email)) {
+      setEmailError('Please enter a valid email address');
+      isValid = false;
+    }
+
+    // Phone validation
+    if (!phoneNumber.trim()) {
+      setPhoneError('Phone number is required');
+      isValid = false;
+    } else if (phoneNumber.length < 10) {
+      setPhoneError('Phone number must be at least 10 digits');
+      isValid = false;
+    }
+
+    // Mentor bio validation
+    if (user?.role === 'mentor' && !bio.trim()) {
+      setBioError('Bio is required for mentors');
+      isValid = false;
+    }
+
+    // User interests validation
+    if (user?.role === 'user' && selectedTags.length === 0) {
+      setInterestsError('Please select at least one interest');
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
+  const handleUpdate = () => {
+    if (validateForm()) {
+      // Submit logic (API call or navigate back)
+      navigation.goBack();
+    }
+  };
+
+  const openGallery = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        quality: 1,
+      },
+      response => {
+        if (response.didCancel) {
+          return response.didCancel;
+        } else if (response.errorCode) {
+          return response.errorCode;
+        } else if (response.assets && response.assets.length > 0) {
+          const selected = response.assets[0];
+
+          // Validate size (e.g., max 5MB)
+          if (selected.fileSize && selected.fileSize > 5 * 1024 * 1024) {
+            setImageError('Image must be less than 5MB');
+            return;
+          }
+
+          // Validate type (only jpg/png allowed)
+          if (
+            selected.type &&
+            !['image/jpeg', 'image/jpg', 'image/png'].includes(selected.type)
+          ) {
+            setImageError('Only JPG or PNG images are allowed');
+            return;
+          }
+
+          setImageError('');
+          setProfileImage({uri: selected.uri});
+        }
+      },
+    );
+  };
+
   return (
     <KeyboardAvoidingView style={{flex: 1}} keyboardVerticalOffset={80}>
       <ThemedView style={styles.mainContainer}>
-        <AppHeader backIcon={backIcon} title="Edit Profile" height={205} />
+        <AppHeader title="Edit Profile" height={205} />
         <View style={styles.profileContainer}>
-          <Image source={imagePath.profileUser} style={styles.profileImage} />
-          <TouchableOpacity
-            style={styles.editIcon}
-            onPress={() => navigation.goBack()}>
+          <Image source={profileImage} style={styles.profileImage} />
+          <TouchableOpacity style={styles.editIcon} onPress={openGallery}>
             <svgPath.EditProfile width={15} height={15} fill={colors.white} />
           </TouchableOpacity>
         </View>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled">
+          <View style={styles.errorContainer}>
+            {imageError ? (
+              <Text style={styles.errorText2}>{imageError}</Text>
+            ) : null}
+          </View>
           <View style={styles.headerContainer}>
             <ThemedText style={styles.headerTitle}>Ben Harvey</ThemedText>
             <ThemedText style={styles.headerSubTitle}>
@@ -94,18 +207,42 @@ const EditProfileScreen = () => {
             placeholder="Enter your username"
             value={username}
             onChangeText={setUsername}
+            error={usernameError}
           />
+          {user?.role === 'mentor' && (
+            <View style={styles.bioContainer}>
+              <Text style={styles.label}>Bio</Text>
+              <TextInput
+                style={[
+                  styles.bioInput,
+                  {borderColor: bioError ? colors.red : colors.blueHue4},
+                ]}
+                multiline
+                numberOfLines={4}
+                placeholder="Tell the user about yourself"
+                value={bio}
+                onChangeText={setBio}
+                textAlignVertical="top"
+                placeholderTextColor={colors.black20}
+              />
+              {bioError ? (
+                <Text style={styles.errorText2}>{bioError}</Text>
+              ) : null}
+            </View>
+          )}
           <Input
             title="Email"
             placeholder="Enter your email"
             value={email}
             onChangeText={setEmail}
+            error={emailError}
           />
           <InputTextPhoneNumber
             textLable="Phone Number"
             countryCode={countryCode}
             phoneNumber={phoneNumber}
             onChangeText={handlePhoneInputChange}
+            error={phoneError}
           />
           {user?.role === 'mentor' ? (
             <>
@@ -138,6 +275,9 @@ const EditProfileScreen = () => {
                   scrollEnabled={false}
                 />
               </View>
+              {user?.role === 'user' && interestsError ? (
+                <Text style={styles.errorText}>{interestsError}</Text>
+              ) : null}
             </>
           )}
           <Button
@@ -145,7 +285,7 @@ const EditProfileScreen = () => {
             style={styles.buttonUser}
             backgroundGradient={[colors.blue, colors.blue2]}
             textColor={colors.silver}
-            onPress={() => navigation.goBack()}
+            onPress={handleUpdate}
           />
         </ScrollView>
       </ThemedView>
@@ -169,6 +309,8 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderColor: colors.white,
+    borderRadius: 150,
+    borderWidth: 2,
   },
   editIcon: {
     position: 'absolute',
@@ -247,5 +389,37 @@ const styles = StyleSheet.create({
   },
   tagTextSelected: {
     color: colors.primary,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginVertical: 6,
+    color: colors.blueHue,
+  },
+  bioInput: {
+    height: 100,
+    borderWidth: 1,
+    borderColor: colors.blueHue4,
+    borderRadius: 8,
+    // marginBottom: 14,
+    padding: 10,
+    textAlignVertical: 'top', // ensure this is also here
+  },
+  bioContainer: {
+    marginHorizontal: 20,
+  },
+  errorText: {
+    color: colors.red,
+    fontSize: 12,
+    marginTop: 4,
+    marginLeft: 20,
+  },
+  errorText2: {
+    color: colors.red,
+    fontSize: 12,
+    marginTop: 4,
+  },
+  errorContainer: {
+    alignItems: 'center',
   },
 });

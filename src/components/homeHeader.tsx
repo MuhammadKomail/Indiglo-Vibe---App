@@ -18,6 +18,7 @@ interface HomeHeaderProps {
   notifiction: () => void;
   ViewDetail: () => void;
   settingScreen: () => void;
+  openFilter: () => void;
 }
 
 const HomeHeader: React.FC<HomeHeaderProps> = ({
@@ -25,6 +26,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
   notifiction,
   ViewDetail,
   settingScreen,
+  openFilter,
 }) => {
   const {user} = useSelector((state: RootState) => state.auth);
 
@@ -104,8 +106,8 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
           <View style={styles.bottomContainer2}>
             <HomeSearch
               iconBackgroundColor={colors.white}
-              iconColor={colors.primary}
               searchbarBackground={colors.white}
+              onFilterPress={openFilter}
             />
           </View>
         )}

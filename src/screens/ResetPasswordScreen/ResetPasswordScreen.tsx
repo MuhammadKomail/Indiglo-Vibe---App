@@ -8,9 +8,8 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
-import {colors, imgPath} from '../../styles/style';
+import {colors, imgPath, svgPath} from '../../styles/style';
 import Button from '../../components/button';
-import MaterialIcons from '@react-native-vector-icons/material-icons';
 import Input from '../../components/Input';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../types/navigationTypes';
@@ -27,6 +26,46 @@ const ResetPasswordScreen = ({navigation, route}: ResetPasswordScreenProps) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isReviewModalVisible, setIsReviewModalVisible] = React.useState(false);
+  const [errors, setErrors] = useState<{
+    newPassword?: string;
+    confirmPassword?: string;
+  }>({});
+
+  const validatePassword = (password: string) => {
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters long';
+    }
+    if (!/[A-Z]/.test(password)) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    if (!/[a-z]/.test(password)) {
+      return 'Password must contain at least one lowercase letter';
+    }
+    if (!/[0-9]/.test(password)) {
+      return 'Password must contain at least one digit';
+    }
+    return '';
+  };
+
+  const handleUpdate = () => {
+    const newErrors: {newPassword?: string; confirmPassword?: string} = {};
+
+    const passwordError = validatePassword(newPassword);
+    if (passwordError) {
+      newErrors.newPassword = passwordError;
+    }
+
+    if (confirmPassword !== newPassword) {
+      newErrors.confirmPassword = 'Passwords do not match';
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      // ✅ No errors, show success modal
+      setIsReviewModalVisible(true);
+    }
+  };
 
   const handleBack = () => {
     navigation.goBack();
@@ -42,12 +81,7 @@ const ResetPasswordScreen = ({navigation, route}: ResetPasswordScreenProps) => {
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled">
           <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-            <MaterialIcons
-              name="arrow-back-ios"
-              size={16}
-              color={colors.blueHue}
-              style={styles.backIcon}
-            />
+            <svgPath.BackArrow width={12} height={12} />
           </TouchableOpacity>
           <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -66,6 +100,9 @@ const ResetPasswordScreen = ({navigation, route}: ResetPasswordScreenProps) => {
                 onChangeText={setNewPassword}
                 secureTextEntry
               />
+              {errors.newPassword && (
+                <Text style={styles.errorText}>{errors.newPassword}</Text>
+              )}
               <Input
                 title="Confirm Password"
                 placeholder="Confirm your new password"
@@ -73,13 +110,16 @@ const ResetPasswordScreen = ({navigation, route}: ResetPasswordScreenProps) => {
                 onChangeText={setConfirmPassword}
                 secureTextEntry
               />
+              {errors.confirmPassword && (
+                <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+              )}
             </View>
             <Button
               title="Update"
               style={styles.buttonUser}
               backgroundGradient={[colors.blue, colors.blue2]}
               textColor={colors.silver}
-              onPress={() => setIsReviewModalVisible(true)}
+              onPress={handleUpdate}
             />
           </View>
         </ScrollView>
@@ -116,8 +156,8 @@ const styles = StyleSheet.create({
     borderColor: colors.lightGray10,
     borderWidth: 1,
     borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
     textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'center',
@@ -126,9 +166,6 @@ const styles = StyleSheet.create({
     width: 96,
     height: 96,
     marginBottom: 24,
-  },
-  backIcon: {
-    marginLeft: 7,
   },
   formContainer: {
     marginTop: 20,
@@ -141,11 +178,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // marginBottom: 10,
-  },
-  headerText: {
-    color: colors.blueHue,
-    fontSize: 16,
-    fontWeight: '400',
   },
   headerBox: {
     width: '90%',
@@ -174,6 +206,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderRadius: 15,
     marginTop: 100,
+  },
+  errorText: {
+    color: colors.red,
+    marginLeft: 25,
+    width: '90%',
+    fontSize: 14,
   },
 });
 
