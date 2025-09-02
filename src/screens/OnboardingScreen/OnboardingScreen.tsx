@@ -8,9 +8,11 @@ import {
   FlatList,
   Dimensions,
   ImageBackground,
+  StatusBar,
 } from 'react-native';
 import {colors, imgPath} from '../../styles/style';
 import navigate from '../../navigation/navigationService';
+import {ThemedIcon} from '../../components/ThemedIcon';
 
 const {width, height} = Dimensions.get('window');
 
@@ -63,6 +65,11 @@ const OnboardingScreen = () => {
       source={imgPath.backgroundImg}
       style={styles.backgroundImg}
       resizeMode="cover">
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
       {/* Skip button */}
       <TouchableOpacity style={styles.skipButton} onPress={handleContinue}>
         <Text style={styles.skipText}>Skip</Text>
@@ -96,7 +103,7 @@ const OnboardingScreen = () => {
         <TouchableOpacity
           style={styles.continueButton}
           onPress={handleContinue}>
-          <Text style={styles.continueText}>→</Text>
+          <ThemedIcon name="arrow-forward" size={24} color={colors.black} />
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -139,7 +146,7 @@ const styles = StyleSheet.create({
   },
   skipButton: {
     position: 'absolute',
-    top: 70,
+    top: 50,
     right: 20,
     zIndex: 1,
     backgroundColor: colors.lightGray,
@@ -183,10 +190,6 @@ const styles = StyleSheet.create({
     height: 62,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  continueText: {
-    fontSize: 24,
-    color: colors.secondary,
   },
 });
 

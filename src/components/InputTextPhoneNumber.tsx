@@ -21,6 +21,7 @@ interface InputTextPhoneNumberProps {
   phoneNumber?: string;
   sendPackage?: boolean;
   error?: string;
+  onEndEditing?: () => void; // optional blur callback for external validation
 }
 
 const InputTextPhoneNumber: React.FC<InputTextPhoneNumberProps> = ({
@@ -33,6 +34,7 @@ const InputTextPhoneNumber: React.FC<InputTextPhoneNumberProps> = ({
   phoneNumber = '',
   sendPackage = false,
   error,
+  onEndEditing,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -82,7 +84,12 @@ const InputTextPhoneNumber: React.FC<InputTextPhoneNumberProps> = ({
           onChangeText={handlePhoneNumberChange}
           keyboardType="numeric"
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onBlur={() => {
+            setIsFocused(false);
+            if (onEndEditing) {
+              onEndEditing();
+            }
+          }}
           placeholderTextColor={colors.black20}
         />
       </View>

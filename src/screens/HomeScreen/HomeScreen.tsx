@@ -1,4 +1,11 @@
-import {StyleSheet, View, Modal, TouchableWithoutFeedback} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Modal,
+  TouchableWithoutFeedback,
+  StatusBar,
+} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
@@ -33,42 +40,54 @@ const HomeScreen = () => {
   };
 
   return (
-    <ThemedView style={styles.mainContainer}>
-      <HomeHeader
-        title={'Guest'}
-        notifiction={drawerOpen}
-        ViewDetail={ViewDetail}
-        settingScreen={settingScreen}
-        openFilter={openFilter}
+    <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+      {/* Draw content under notch/status bar */}
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
       />
+      <ThemedView style={styles.mainContainer}>
+        <HomeHeader
+          title={'Guest'}
+          notifiction={drawerOpen}
+          ViewDetail={ViewDetail}
+          settingScreen={settingScreen}
+          openFilter={openFilter}
+        />
 
-      {user?.role === 'mentor' ? <MentorHome /> : <UserHome />}
+        {user?.role === 'mentor' ? <MentorHome /> : <UserHome />}
 
-      {/* Bottom Panel Modal */}
-      <Modal
-        visible={isFilterVisible}
-        transparent
-        animationType="slide"
-        onRequestClose={closeFilter}>
-        {/* Background */}
-        <TouchableWithoutFeedback onPress={closeFilter}>
-          <View style={styles.modalBackground}>
-            {/* Prevent closing when tapping inside */}
-            <TouchableWithoutFeedback>
-              <View style={styles.modalContent}>
-                <FilterOverlay onClose={closeFilter} />
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-    </ThemedView>
+        {/* Bottom Panel Modal */}
+        <Modal
+          visible={isFilterVisible}
+          transparent
+          animationType="slide"
+          onRequestClose={closeFilter}>
+          {/* Background */}
+          <TouchableWithoutFeedback onPress={closeFilter}>
+            <View style={styles.modalBackground}>
+              {/* Prevent closing when tapping inside */}
+              <TouchableWithoutFeedback>
+                <View style={styles.modalContent}>
+                  <FilterOverlay onClose={closeFilter} />
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      </ThemedView>
+    </SafeAreaView>
   );
 };
 
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
   mainContainer: {
     flex: 1,
     backgroundColor: colors.white,

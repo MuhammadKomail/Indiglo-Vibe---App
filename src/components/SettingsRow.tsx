@@ -1,14 +1,8 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Switch,
-  Image,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import colors from '../styles/colors';
 import {svgPath} from '../styles/svgPath';
+import CustomSwitch from './customSwitch';
 
 interface SettingsRowProps {
   icon: any; // can be require(...) or a React component
@@ -40,10 +34,11 @@ const SettingsRow: React.FC<SettingsRowProps> = ({
       </View>
       <View>
         {isSwitch ? (
-          <Switch
-            value={value}
-            onValueChange={onToggle}
-            trackColor={{false: colors.gray, true: colors.primary}}
+          <CustomSwitch
+            value={!!value}
+            onValueChange={v => onToggle && onToggle(v)}
+            width={52}
+            height={32}
           />
         ) : (
           <svgPath.RightArrow width={24} height={24} fill={colors.gray} />

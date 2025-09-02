@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, ScrollView, KeyboardAvoidingView} from 'react-native';
 import {colors} from '../../styles/style';
 import Button from '../../components/button';
@@ -22,8 +22,80 @@ const ChangePasswordScreen = () => {
   const [newPasswordError, setNewPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
+  // Touched states
+  const [touched, setTouched] = useState({
+    old: false,
+    new: false,
+    confirm: false,
+  });
+
   // Password regex: at least 8 chars, 1 uppercase, 1 lowercase, 1 digit
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+  // Debounced validation: runs after user pauses typing, only for touched fields
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (touched.old) {
+        setOldPasswordError(
+          oldPassword.trim() ? '' : 'Old password is required',
+        );
+      }
+      if (touched.new) {
+        if (!newPassword.trim())
+          setNewPasswordError('New password is required');
+        else if (!passwordRegex.test(newPassword))
+          setNewPasswordError(
+            'Password must be at least 8 characters long and contain an uppercase, lowercase, and a digit',
+          );
+        else setNewPasswordError('');
+      }
+      if (touched.confirm) {
+        if (!confirmPassword.trim())
+          setConfirmPasswordError('Please confirm your password');
+        else if (confirmPassword !== newPassword)
+          setConfirmPasswordError('Passwords do not match');
+        else setConfirmPasswordError('');
+      }
+    }, 600);
+    return () => clearTimeout(t);
+  }, [oldPassword, newPassword, confirmPassword, touched]);
+
+  // Change handlers clear errors while typing
+  const handleOldChange = (text: string) => {
+    if (oldPasswordError) setOldPasswordError('');
+    setOldPassword(text);
+  };
+  const handleNewChange = (text: string) => {
+    if (newPasswordError) setNewPasswordError('');
+    setNewPassword(text);
+  };
+  const handleConfirmChange = (text: string) => {
+    if (confirmPasswordError) setConfirmPasswordError('');
+    setConfirmPassword(text);
+  };
+
+  // Blur handlers: mark touched and validate immediately
+  const onOldEndEditing = () => {
+    setTouched(prev => ({...prev, old: true}));
+    setOldPasswordError(oldPassword.trim() ? '' : 'Old password is required');
+  };
+  const onNewEndEditing = () => {
+    setTouched(prev => ({...prev, new: true}));
+    if (!newPassword.trim()) setNewPasswordError('New password is required');
+    else if (!passwordRegex.test(newPassword))
+      setNewPasswordError(
+        'Password must be at least 8 characters long and contain an uppercase, lowercase, and a digit',
+      );
+    else setNewPasswordError('');
+  };
+  const onConfirmEndEditing = () => {
+    setTouched(prev => ({...prev, confirm: true}));
+    if (!confirmPassword.trim())
+      setConfirmPasswordError('Please confirm your password');
+    else if (confirmPassword !== newPassword)
+      setConfirmPasswordError('Passwords do not match');
+    else setConfirmPasswordError('');
+  };
 
   const validateForm = () => {
     let isValid = true;
@@ -31,6 +103,7 @@ const ChangePasswordScreen = () => {
     setOldPasswordError('');
     setNewPasswordError('');
     setConfirmPasswordError('');
+    setTouched({old: true, new: true, confirm: true});
 
     // Old password
     if (!oldPassword.trim()) {
@@ -80,7 +153,8 @@ const ChangePasswordScreen = () => {
               title="Old Password"
               placeholder="Enter your old password"
               value={oldPassword}
-              onChangeText={setOldPassword}
+              onChangeText={handleOldChange}
+              onEndEditing={onOldEndEditing}
               secureTextEntry
               error={oldPasswordError}
             />
@@ -88,7 +162,8 @@ const ChangePasswordScreen = () => {
               title="New Password"
               placeholder="Enter your new password"
               value={newPassword}
-              onChangeText={setNewPassword}
+              onChangeText={handleNewChange}
+              onEndEditing={onNewEndEditing}
               secureTextEntry
               error={newPasswordError}
             />
@@ -96,7 +171,8 @@ const ChangePasswordScreen = () => {
               title="Confirm Password"
               placeholder="Confirm your new password"
               value={confirmPassword}
-              onChangeText={setConfirmPassword}
+              onChangeText={handleConfirmChange}
+              onEndEditing={onConfirmEndEditing}
               secureTextEntry
               error={confirmPasswordError}
             />
@@ -108,7 +184,6 @@ const ChangePasswordScreen = () => {
             textColor={colors.silver}
             onPress={handleUpdate}
           />
-          {/* </View> */}
         </ScrollView>
       </KeyboardAvoidingView>
       <SuccessModal

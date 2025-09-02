@@ -5,6 +5,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -169,6 +170,12 @@ const SettingScreen = () => {
   const ListHeaderComponent = () => {
     return (
       <View style={styles.headerContainer}>
+        {/* Draw content under notch/status bar */}
+        <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="dark-content"
+        />
         <ThemedText style={styles.headerTitle}>Ben Harvey</ThemedText>
         <ThemedText style={styles.headerSubTitle}>
           benharvey@gmail.com

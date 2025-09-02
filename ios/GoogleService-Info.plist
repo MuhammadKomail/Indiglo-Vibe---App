@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.boilerplate.app</string>
+	<string>com.indiglovibe.app</string>
 	<key>PROJECT_ID</key>
 	<string>newproject-66379</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:876666757390:ios:811903df4b46cf3c51f75f</string>
+	<string>1:876666757390:ios:66278d0dce19159551f75f</string>
 </dict>
 </plist>

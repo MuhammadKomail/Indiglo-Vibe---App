@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   ImageBackground,
@@ -39,61 +39,143 @@ const SignupScreen: React.FC<SignupScreenProps> = ({route, navigation}) => {
   const [passwordError, setPasswordError] = useState('');
   const [phoneError, setPhoneError] = useState('');
 
+  // Touched states
+  const [usernameTouched, setUsernameTouched] = useState(false);
+  const [emailTouched, setEmailTouched] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
+  const [phoneTouched, setPhoneTouched] = useState(false);
+
+  // Validators
+  const validateUsername = (val: string) => {
+    const v = val.trim();
+    if (!v) return 'Username is required';
+    if (v.length < 3) return 'Username must be at least 3 characters';
+    return '';
+  };
+
+  const validateEmail = (val: string) => {
+    const v = val.trim();
+    if (!v) return 'Email is required';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(v)) return 'Please enter a valid email address';
+    return '';
+  };
+
+  const validatePassword = (val: string) => {
+    const v = val.trim();
+    if (!v) return 'Password is required';
+    if (v.length < 8) return 'Password must be at least 8 characters';
+    const missing: string[] = [];
+    if (!/[A-Z]/.test(v)) missing.push('uppercase');
+    if (!/[a-z]/.test(v)) missing.push('lowercase');
+    if (!/\d/.test(v)) missing.push('digit');
+    if (missing.length) return `Include at least one ${missing.join(', ')}`;
+    return '';
+  };
+
+  const expectedPhoneLengths: Record<string, number> = {
+    '+1': 10, // US/Canada
+    '+44': 10, // UK (common case)
+    '+91': 10, // India
+    '+92': 10, // Pakistan
+    '+971': 9, // UAE (mobile typically 9 after code)
+    '+61': 9, // Australia
+    '+49': 10, // Germany (varies; using 10 as common)
+    '+33': 9, // France
+    '+81': 9, // Japan (mobile usually 9 after code)
+  };
+
+  const validatePhone = (cc: string, local: string) => {
+    const digits = local.trim();
+    if (!digits) return 'Phone number is required';
+    const expected = expectedPhoneLengths[cc];
+    if (expected && digits.length !== expected) {
+      return 'Invalid phone number';
+    }
+    // Fallback range if country not mapped
+    if (!expected && (digits.length < 6 || digits.length > 14)) {
+      return 'Invalid phone number';
+    }
+    return '';
+  };
+
+  // Debounced validation after user pauses typing (runs only if field touched)
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (usernameTouched) setUsernameError(validateUsername(username));
+      if (emailTouched) setEmailError(validateEmail(email));
+      if (passwordTouched) setPasswordError(validatePassword(password));
+      if (phoneTouched) setPhoneError(validatePhone(countryCode, phoneNumber));
+    }, 600);
+    return () => clearTimeout(t);
+  }, [
+    username,
+    email,
+    password,
+    phoneNumber,
+    countryCode,
+    usernameTouched,
+    emailTouched,
+    passwordTouched,
+    phoneTouched,
+  ]);
+
+  // Change handlers clear errors while typing for better UX
+  const handleUsernameChange = (text: string) => {
+    if (usernameError) setUsernameError('');
+    setUsername(text);
+  };
+  const handleEmailChange = (text: string) => {
+    if (emailError) setEmailError('');
+    setEmail(text);
+  };
+  const handlePasswordChange = (text: string) => {
+    if (passwordError) setPasswordError('');
+    setPassword(text);
+  };
   const handlePhoneInputChange = (
     newCountryCode: string,
     newPhoneNumber: string,
   ) => {
+    if (phoneError) setPhoneError('');
     setCountryCode(newCountryCode);
     setPhoneNumber(newPhoneNumber);
   };
 
+  // Blur (end editing) handlers show errors immediately and mark touched
+  const handleUsernameEndEditing = () => {
+    setUsernameTouched(true);
+    setUsernameError(validateUsername(username));
+  };
+  const handleEmailEndEditing = () => {
+    setEmailTouched(true);
+    setEmailError(validateEmail(email));
+  };
+  const handlePasswordEndEditing = () => {
+    setPasswordTouched(true);
+    setPasswordError(validatePassword(password));
+  };
+  const handlePhoneEndEditing = () => {
+    setPhoneTouched(true);
+    setPhoneError(validatePhone(countryCode, phoneNumber));
+  };
+
   const validateForm = () => {
-    let isValid = true;
-    setUsernameError('');
-    setEmailError('');
-    setPasswordError('');
-    setPhoneError('');
+    // Mark all as touched and validate immediately
+    setUsernameTouched(true);
+    setEmailTouched(true);
+    setPasswordTouched(true);
+    setPhoneTouched(true);
 
-    // Username validation
-    if (!username.trim()) {
-      setUsernameError('Username is required');
-      isValid = false;
-    } else if (username.length < 3) {
-      setUsernameError('Username must be at least 3 characters long');
-      isValid = false;
-    }
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.trim()) {
-      setEmailError('Email is required');
-      isValid = false;
-    } else if (!emailRegex.test(email)) {
-      setEmailError('Please enter a valid email address');
-      isValid = false;
-    }
-
-    // Password validation
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-    if (!password.trim()) {
-      setPasswordError('Password is required');
-      isValid = false;
-    } else if (!passwordRegex.test(password)) {
-      setPasswordError(
-        'Password must be at least 8 characters long and contain uppercase, lowercase, and a digit',
-      );
-      isValid = false;
-    }
-
-    // Phone validation
-    if (!phoneNumber.trim()) {
-      setPhoneError('Phone number is required');
-      isValid = false;
-    } else if (phoneNumber.length < 10) {
-      setPhoneError('Phone number must be at least 10 digits');
-      isValid = false;
-    }
-    return isValid;
+    const uErr = validateUsername(username);
+    const eErr = validateEmail(email);
+    const pErr = validatePassword(password);
+    const phErr = validatePhone(countryCode, phoneNumber);
+    setUsernameError(uErr);
+    setEmailError(eErr);
+    setPasswordError(pErr);
+    setPhoneError(phErr);
+    return !(uErr || eErr || pErr || phErr);
   };
 
   const handleSignup = () => {
@@ -139,14 +221,16 @@ const SignupScreen: React.FC<SignupScreenProps> = ({route, navigation}) => {
               title="Username"
               placeholder="Enter your username"
               value={username}
-              onChangeText={setUsername}
+              onChangeText={handleUsernameChange}
+              onEndEditing={handleUsernameEndEditing}
               error={usernameError}
             />
             <Input
               title="Password"
               placeholder="Enter your password"
               value={password}
-              onChangeText={setPassword}
+              onChangeText={handlePasswordChange}
+              onEndEditing={handlePasswordEndEditing}
               secureTextEntry={true}
               error={passwordError}
             />
@@ -154,7 +238,8 @@ const SignupScreen: React.FC<SignupScreenProps> = ({route, navigation}) => {
               title="Email"
               placeholder="Enter your email"
               value={email}
-              onChangeText={setEmail}
+              onChangeText={handleEmailChange}
+              onEndEditing={handleEmailEndEditing}
               error={emailError}
             />
             <InputTextPhoneNumber
@@ -162,6 +247,8 @@ const SignupScreen: React.FC<SignupScreenProps> = ({route, navigation}) => {
               countryCode={countryCode}
               phoneNumber={phoneNumber}
               onChangeText={handlePhoneInputChange}
+              onEndEditing={handlePhoneEndEditing}
+              // Blur handling via phone input: simulate with end typing callback when possible
               error={phoneError}
             />
             <Button

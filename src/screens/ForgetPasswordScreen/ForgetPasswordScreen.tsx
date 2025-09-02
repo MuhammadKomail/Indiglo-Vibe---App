@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   ImageBackground,
@@ -27,6 +27,7 @@ const ForgetPasswordScreen = ({
 
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
+  const [touched, setTouched] = useState(false);
 
   const handleBack = () => {
     navigation.goBack();
@@ -37,7 +38,32 @@ const ForgetPasswordScreen = ({
     return regex.test(email);
   };
 
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (!touched) return;
+      if (!username.trim()) return setError('Email is required');
+      if (!validateEmail(username))
+        return setError('Please enter a valid email address');
+      setError('');
+    }, 600);
+    return () => clearTimeout(t);
+  }, [username, touched]);
+
+  const handleEmailChange = (text: string) => {
+    if (error) setError('');
+    setUsername(text);
+  };
+
+  const handleEmailEndEditing = () => {
+    setTouched(true);
+    if (!username.trim()) return setError('Email is required');
+    if (!validateEmail(username))
+      return setError('Please enter a valid email address');
+    setError('');
+  };
+
   const handleRequestCode = () => {
+    setTouched(true);
     if (!username) {
       setError('Email is required');
       return;
@@ -75,7 +101,8 @@ const ForgetPasswordScreen = ({
               <Input
                 placeholder="Enter your email address"
                 value={username}
-                onChangeText={setUsername}
+                onChangeText={handleEmailChange}
+                onEndEditing={handleEmailEndEditing}
                 error={error}
               />
             </View>

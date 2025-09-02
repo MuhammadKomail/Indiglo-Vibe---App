@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   ImageBackground,
@@ -30,6 +30,13 @@ const ResetPasswordScreen = ({navigation, route}: ResetPasswordScreenProps) => {
     newPassword?: string;
     confirmPassword?: string;
   }>({});
+  const [touched, setTouched] = useState<{
+    newPassword: boolean;
+    confirmPassword: boolean;
+  }>({
+    newPassword: false,
+    confirmPassword: false,
+  });
 
   const validatePassword = (password: string) => {
     if (password.length < 8) {
@@ -47,7 +54,52 @@ const ResetPasswordScreen = ({navigation, route}: ResetPasswordScreenProps) => {
     return '';
   };
 
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setErrors(prev => {
+        const next = {...prev};
+        if (touched.newPassword) {
+          const npErr = validatePassword(newPassword);
+          next.newPassword = npErr || undefined;
+        }
+        if (touched.confirmPassword) {
+          const cpErr =
+            confirmPassword !== newPassword ? 'Passwords do not match' : '';
+          next.confirmPassword = cpErr || undefined;
+        }
+        return next;
+      });
+    }, 600);
+    return () => clearTimeout(t);
+  }, [newPassword, confirmPassword, touched]);
+
+  const handleNewPasswordChange = (text: string) => {
+    if (errors.newPassword)
+      setErrors(prev => ({...prev, newPassword: undefined}));
+    setNewPassword(text);
+  };
+
+  const handleConfirmPasswordChange = (text: string) => {
+    if (errors.confirmPassword)
+      setErrors(prev => ({...prev, confirmPassword: undefined}));
+    setConfirmPassword(text);
+  };
+
+  const handleNewPasswordEndEditing = () => {
+    setTouched(prev => ({...prev, newPassword: true}));
+    const npErr = validatePassword(newPassword);
+    setErrors(prev => ({...prev, newPassword: npErr || undefined}));
+  };
+
+  const handleConfirmPasswordEndEditing = () => {
+    setTouched(prev => ({...prev, confirmPassword: true}));
+    const cpErr =
+      confirmPassword !== newPassword ? 'Passwords do not match' : '';
+    setErrors(prev => ({...prev, confirmPassword: cpErr || undefined}));
+  };
+
   const handleUpdate = () => {
+    setTouched({newPassword: true, confirmPassword: true});
     const newErrors: {newPassword?: string; confirmPassword?: string} = {};
 
     const passwordError = validatePassword(newPassword);
@@ -62,7 +114,6 @@ const ResetPasswordScreen = ({navigation, route}: ResetPasswordScreenProps) => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // ✅ No errors, show success modal
       setIsReviewModalVisible(true);
     }
   };
@@ -97,7 +148,8 @@ const ResetPasswordScreen = ({navigation, route}: ResetPasswordScreenProps) => {
                 title="New Password"
                 placeholder="Enter your new password"
                 value={newPassword}
-                onChangeText={setNewPassword}
+                onChangeText={handleNewPasswordChange}
+                onEndEditing={handleNewPasswordEndEditing}
                 secureTextEntry
               />
               {errors.newPassword && (
@@ -107,7 +159,8 @@ const ResetPasswordScreen = ({navigation, route}: ResetPasswordScreenProps) => {
                 title="Confirm Password"
                 placeholder="Confirm your new password"
                 value={confirmPassword}
-                onChangeText={setConfirmPassword}
+                onChangeText={handleConfirmPasswordChange}
+                onEndEditing={handleConfirmPasswordEndEditing}
                 secureTextEntry
               />
               {errors.confirmPassword && (

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   ImageBackground,
@@ -32,6 +32,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route, navigation}) => {
   const [password, setPassword] = useState('');
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [usernameTouched, setUsernameTouched] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -43,31 +45,62 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route, navigation}) => {
     navigation.navigate('signup-screen', {role});
   };
 
+  const validateUsername = (val: string) => {
+    const v = val.trim();
+    if (!v) return 'Username is required';
+    if (v.length < 3) return 'Username must be at least 3 characters';
+    return '';
+  };
+
+  const validatePassword = (val: string) => {
+    const v = val.trim();
+    if (!v) return 'Password is required';
+    if (v.length < 8) return 'Password must be at least 8 characters';
+    const missing: string[] = [];
+    if (!/[A-Z]/.test(v)) missing.push('uppercase');
+    if (!/[a-z]/.test(v)) missing.push('lowercase');
+    if (!/\d/.test(v)) missing.push('digit');
+    if (missing.length) return `Include at least one ${missing.join(', ')}`;
+    return '';
+  };
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (usernameTouched) setUsernameError(validateUsername(username));
+      if (passwordTouched) setPasswordError(validatePassword(password));
+    }, 600);
+    return () => clearTimeout(t);
+  }, [username, password, usernameTouched, passwordTouched]);
+
+  const handleUsernameChange = (text: string) => {
+    if (usernameError) setUsernameError('');
+    setUsername(text);
+  };
+
+  const handlePasswordChange = (text: string) => {
+    if (passwordError) setPasswordError('');
+    setPassword(text);
+  };
+
+  const handleUsernameEndEditing = () => {
+    setUsernameTouched(true);
+    setUsernameError(validateUsername(username));
+  };
+
+  const handlePasswordEndEditing = () => {
+    setPasswordTouched(true);
+    setPasswordError(validatePassword(password));
+  };
+
   const handleLogin = () => {
-    let valid = true;
-    setUsernameError('');
-    setPasswordError('');
-    // Username validation
-    if (!username.trim()) {
-      setUsernameError('Username is required');
-      valid = false;
-    }
+    setUsernameTouched(true);
+    setPasswordTouched(true);
+    const uErr = validateUsername(username);
+    const pErr = validatePassword(password);
+    setUsernameError(uErr);
+    setPasswordError(pErr);
+    if (uErr || pErr) return;
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-    if (!password.trim()) {
-      setPasswordError('Password is required');
-      valid = false;
-    } else if (!passwordRegex.test(password)) {
-      setPasswordError(
-        'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.',
-      );
-      valid = false;
-    }
-
-    // If API returned error
-    if (!valid) return;
-
-    // Dispatch login action
     dispatch(loginUser({data: {name: username, password, role}}));
   };
 
@@ -103,14 +136,16 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route, navigation}) => {
               title="Username"
               placeholder="Enter your username"
               value={username}
-              onChangeText={setUsername}
+              onChangeText={handleUsernameChange}
+              onEndEditing={handleUsernameEndEditing}
               error={usernameError}
             />
             <Input
               title="Password"
               placeholder="Enter your password"
               value={password}
-              onChangeText={setPassword}
+              onChangeText={handlePasswordChange}
+              onEndEditing={handlePasswordEndEditing}
               secureTextEntry={true}
               error={passwordError}
             />

@@ -3,6 +3,7 @@ import {
   View,
   TouchableOpacity,
   ImageBackground,
+  StatusBar,
 } from 'react-native';
 import React from 'react';
 import {colors, imgPath, svgPath} from '../styles/style';
@@ -44,6 +45,11 @@ const AppHeader: React.FC<AppHeaderProps> = ({
         source={imgPath.headerBackground}
         style={styles.backgroundImg}
         resizeMode="cover">
+        <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="dark-content"
+        />
         <View style={styles.headerContainer}>
           <TouchableOpacity onPress={backClick} style={styles.menuButton}>
             <svgPath.Forward
